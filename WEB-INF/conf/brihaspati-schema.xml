@@ -712,11 +712,20 @@
 <!-- ==========================ip address tracking======================================================== -->
 <table name="QUIZ_IPADDRESS" idMethod="idbroker" description="IP_ADDRESS_STORAGE">
         <column name="ID" required="true" primaryKey="true" autoIncrement="true" Type="INTEGER" size="11"/>
-        <column name="USER_ID" required="true" Type="INTEGER"/>
+        <column name="USER_ID" required="true" Type="VARCHAR" size="255"/>
         <column name="QUIZ_ID" required="true" Type="VARCHAR" size="255"/>
         <column name="IP_ADDRESS" required="true" Type="VARCHAR" size="16"/>
         <column name="QUIZ_DATE" type="DATE"/>
         <column name="QUIZ_STIME" Type="VARCHAR" size="20"/>
         <column name="QUIZ_ETIME" Type="VARCHAR" size="20"/>
+</table>
+<table name="LIVECLASS" idMethod="idbroker" description="LIVE CLASS ANNOUNCE DETAIL">
+        <column name="ID" required="true" primaryKey="true" autoIncrement="true" type="INTEGER"/>
+        <column name="COURSE_ID" Type="VARCHAR" size="255" />
+        <column name="CLASS_NAME" Type="VARCHAR" size="255"/>
+        <column name="PASSKEY" Type="VARCHAR" size="255"/>
+        <column name="CLASS_DATE" Type="DATE" />
+        <column name="CLASS_TIME" Type="VARCHAR" size="255"/>
+        <column name="CLASS_DURATION" Type="VARCHAR" size="255"/>
 </table>
 </database>

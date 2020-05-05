@@ -1,0 +1,181 @@
+#*
+ * @(#) Upload Answer Book.vm
+ * Copyright (c) 2020 ETRG,IIT Kanpur.
+ * All Rights Reserved.
+ * Contributors: Members of ETRG, I.I.T. Kanpur
+ * @author <a href="mailto:nksinghiitk@yahoo.co.in">Nagendra Kumar Singh</a>
+*#
+
+$page.setBgColor($ui.bgcolor)
+$page.setTitle("Announce Live Class Room")
+#set ($lang=$data.getUser().getTemp("lang" ).toString())
+
+<table bgcolor="$ui.tableColor" width=100%>
+<tr>
+<td>
+	<font face="$ui.sansSerifFonts"><b>
+	<a href=$link.setPage("call,IndexHome.vm")>$brih_home</a> |
+	<a href=$link.setPage("call,CourseMgmt_User,CourseHome.vm")>$course</a> |
+ ##	<a href=$link.setPage("call,CourseMgmt_User,CourseManagement.vm")>$brih_course $brih_mgmt</a> | 
+	#if($lang=="hindi")
+		$brih_live $brih_class $brih_QDannounce
+	#else
+		$brih_QDannounce $brih_live $brih_class
+	#end
+	</font>
+</td>
+</tr>
+</table>
+$!data.getMessage()
+<table width=100%>
+<tr>
+<td align=right>
+##	<img src="$content.getURI("/images/hand.gif")">	<a href=javascript:popupWin("/brihaspati/docs/Uploadansbook.html","newWin");>$brih_help</a>
+</td>
+</tr>
+</table>
+<script LANGUAGE="JAVASCRIPT">
+	function validate(uploadform,field)
+	{
+		if(uploadform.lcname.value!="")
+		{	
+			uploadform.actionName.value=field.name;
+                        uploadform.submit();
+		}
+		else
+                {
+                        alert("Please fill the Mandatory(*) Fields !!");
+                }
+	
+	}
+</script>
+
+<form name=uploadform method="post" enctype="multipart/form-data" action="$link.setPage("call,Answerbook,AnnounceLiveClass.vm").setAction("UploadAnsAction")">
+  <div align="left">
+#set($month=["01","02","03","04","05","06","07","08","09","10","11","12"])
+#set($day=["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"])
+#set($hour=["00","01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23"])
+#set($minute=["00","05","10","15","20","25","30","35","40","45","50","55"])
+
+ <table bgcolor="$ui.tableColor" width="100%">
+        <tr bgcolor="$ui.menuColor">
+
+ <td><b>$brih_class #if($lang == "hindi") $brih_Of1 #end $brih_name<font color=Red>*</font></b></td>
+ <td><input type="text" name="lcname" value="$lcname" size=30  readonly></td>
+</tr>
+ <tr>
+                <td><b>$brih_class $brih_Da</b></td>
+                <td><select class="drop" id="y" name="Start_year"  >
+                <option value="$cyear" >$cyear
+                #foreach($year in $year_list)
+                        #if($cyear != $year)
+                        <option value="$year">$year
+                        #end
+                #end
+                </select>
+                &nbsp <b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="m" name="Start_mon"  >
+                <option value="$cmonth">$cmonth
+                #foreach($mon in $month)
+                        #if($mon != $cmonth)
+                        <option value="$mon">$mon
+                        #end
+                #end
+                </select>
+                &nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="d" name="Start_day"  >
+                <option value="$cday">$cday
+                #foreach($d in $day)
+                        #if($d!=$cday)
+                        <option value="$d">$d
+                        #end
+                #end
+                </select>
+                </td>
+        </tr>
+	 <tr>
+                <td><b>$brih_start $brih_time</b><font color=Red>*</font></td>
+                <td>
+
+                        <select name="Start_hr" class="drop">
+ 			<option value="$eHour">$eHour 
+			 #foreach($hr in $hour)
+ 				 #if($hr != $eHour)
+                                      <option value="$hr">$hr
+                                 #end
+			#end
+
+			 </select>
+                        &nbsp<b><font size=+1>-</font></b>&nbsp
+                        <select name="Start_min" class="drop">
+			
+ <option value="$eMinute">$eMinute
+ #foreach($m in $minute)
+  #if($m != $eMinute)
+                                                        <option value="$m">$m
+                                                #end
+                                        #end
+   </select>
+                </td>
+        </tr>
+
+
+
+ <tr>
+                <td><b>$brih_class $brih_duration</b></td>
+                <td><input type="text" name="duration" value="" ></td>
+        </tr>
+ ##<tr>
+   ##             <td><b>$brih_class $brih_pwd</b></td>
+     ##           <td><input type="text" name="passcode" value="" ></td>
+       ## </tr>
+      <tr>
+        <td colspan=5 align="center" bgcolor="$ui.buttonBoxColor">
+
+          <font face="$ui.sansSerifFonts">
+
+          <input type="button" name="eventSubmit_doAnnouncment" value="$brih_QDannounce" onClick="validate(document.uploadform,this);"/>&nbsp; 
+	<input type="hidden" name="actionName" value="">
+    
+          </font>
+        </td>
+      </tr>
+      
+    </table>
+  </div>
+</form>
+
+<table>
+      <tr>
+        <td colspan=5 align="center" bgcolor="$ui.buttonBoxColor">
+          <font face="$ui.sansSerifFonts">
+		$brih_list $brih_of $brih_live $brih_class
+          </font>
+        </td>
+      </tr>
+##$lclist
+        <tr bgcolor="$ui.menuColor">
+<td> $brih_live $brih_class $brih_name</td>
+<td> $brih_Da</td>
+<td> $brih_time </td>
+##<td> $brih_pwd</td>
+</tr>
+<tr>
+#foreach($rc in $lclist)
+<tr>
+<td>$rc.ClassName </td>
+<td>$rc.ClassDate </td>
+<td>$rc.ClassTime </td>
+##<td>$rc.Passkey </td>
+
+</tr>
+#end
+
+</table>
+
+<SCRIPT language="JavaScript">
+        function popupWin(url,popupName)
+        {
+                Win1=window.open(url,popupName,"scrollbars=1,height=400,width=400");
+        }
+</SCRIPT>

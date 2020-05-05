@@ -305,6 +305,12 @@ $!data.getMessage()
 					</table>
 				</td>
 				<td align=center>
+					<table>
+					    <tr><td align=center><a href=$link.setPage("call,Answerbook,AnnounceLiveClass.vm").addPathInfo("count","1").addPathInfo("cname",$groupName) style=text-decoration:none><img border=0 src="$content.getURI("/images/liveclass.png")" class="img" ></a></td></tr>
+
+					    <tr><td align=center><a href=$link.setPage("call,Answerbook,AnnounceLiveClass.vm").addPathInfo("count","1").addPathInfo("cname",$groupName) style=text-decoration:none>$brih_QDannounce  $brih_live $brih_class</a><br></td></tr>
+					
+					</table>
 				</td>
 				<td align=center>
 				</td>
