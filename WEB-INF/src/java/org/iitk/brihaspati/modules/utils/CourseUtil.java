@@ -52,10 +52,8 @@ import org.iitk.brihaspati.om.NoticeReceivePeer;
 import org.iitk.brihaspati.om.TurbineUserGroupRole;
 import org.iitk.brihaspati.om.TurbineUserGroupRolePeer;
 import org.iitk.brihaspati.om.CoursesPeer;
-import org.iitk.brihaspati.om.CoursesPeer;
-import org.iitk.brihaspati.om.CoursesPeer;
-import org.iitk.brihaspati.om.CoursesPeer;
-import org.iitk.brihaspati.om.CoursesPeer;
+import org.iitk.brihaspati.om.LiveclassPeer;
+import org.iitk.brihaspati.om.Liveclass;
 
 /**
  *
@@ -289,6 +287,7 @@ public class CourseUtil{
 						else{
 							unread="false";
 						}
+						String clname=getliveclassname(gName);
 						map = new HashMap();
                                                 map.put("crsId", gName);
                                                 map.put("crsName", courseName);
@@ -298,6 +297,7 @@ public class CourseUtil{
                                                 map.put("gustSts", statc);
                                                 map.put("unreadM", unread);
                                                 map.put("FullName",fullname);
+						map.put("clname",clname);
                                                 list.add(map);			
 					}
 				
@@ -306,6 +306,25 @@ public class CourseUtil{
 		}
 		return list;
 	}
+
+	public static String getliveclassname(String crsid){
+
+			String clname="";
+			String cdate=ExpiryUtil.getCurrentDate("-");
+			try{
+                        Criteria crit=new Criteria();
+                        crit.add(LiveclassPeer.COURSE_ID,crsid);
+                        crit.add(LiveclassPeer.CLASS_DATE,cdate);
+
+                        List v=LiveclassPeer.doSelect(crit);
+                        clname=((Liveclass)v.get(0)).getClassName();
+			}
+			catch(Exception e){
+				clname="";
+			}
+			return clname; 
+	}
+
 	public static String getCourseInstrEmail(String Course_id)
         {
 		String userEmail="";

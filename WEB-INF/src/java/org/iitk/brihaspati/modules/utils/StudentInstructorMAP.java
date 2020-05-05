@@ -126,6 +126,7 @@ public class StudentInstructorMAP
 						if(checkuser == true){
 						boolean checkactive=CourseManagement.CheckcourseIsActive(gid);	
 						if(checkactive==false){
+						String clname=CourseUtil.getliveclassname(groupName);
 						courseName=CourseUtil.getCourseName(groupName);
                     				String Coursealias=CourseUtil.getCourseAlias(groupName); 
 						cDetail= new CourseUserDetail();
@@ -135,6 +136,7 @@ public class StudentInstructorMAP
 						cDetail.setCourseName(courseName);
 						cDetail.setInstructorName(insName);
 						cDetail.setCourseTime(weekTime);
+						cDetail.setFlag(clname);
 						entries.add(cDetail);
 						}
 						}
