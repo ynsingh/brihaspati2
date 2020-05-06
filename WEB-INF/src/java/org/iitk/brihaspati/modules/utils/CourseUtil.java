@@ -314,7 +314,7 @@ public class CourseUtil{
 			try{
                         Criteria crit=new Criteria();
                         crit.add(LiveclassPeer.COURSE_ID,crsid);
-                        crit.add(LiveclassPeer.CLASS_DATE,cdate);
+                //        crit.add(LiveclassPeer.CLASS_DATE,cdate);
 
                         List v=LiveclassPeer.doSelect(crit);
                         clname=((Liveclass)v.get(0)).getClassName();

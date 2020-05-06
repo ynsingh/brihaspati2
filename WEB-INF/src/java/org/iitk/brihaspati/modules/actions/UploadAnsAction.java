@@ -59,6 +59,7 @@ import org.apache.turbine.services.security.torque.om.TurbineUser;
 import org.iitk.brihaspati.modules.utils.MailNotificationThread;
 
 import org.iitk.brihaspati.om.LiveclassPeer;
+import org.iitk.brihaspati.om.Liveclass;
 import org.iitk.brihaspati.modules.utils.GroupUtil;
 import org.iitk.brihaspati.modules.utils.CourseUtil;
 import org.iitk.brihaspati.modules.utils.UserUtil;
@@ -116,14 +117,31 @@ public class UploadAnsAction extends SecureAction_Instructor
 		String passcode= pp.getString("passcode","");
 		try{
 		crit=new Criteria();
-		crit.add(LiveclassPeer.CLASS_NAME,liveclsname);
 		crit.add(LiveclassPeer.COURSE_ID,dir);
-		crit.add(LiveclassPeer.CLASS_DATE,startDate);
-		crit.add(LiveclassPeer.CLASS_TIME,startTime);
-		crit.add(LiveclassPeer.CLASS_DURATION,duration);
-		crit.add(LiveclassPeer.PASSKEY,passcode);
-		LiveclassPeer.doInsert(crit);
-
+		List ls1=LiveclassPeer.doSelect(crit);
+		if(ls1.size() == 0){
+			crit=new Criteria();
+			crit.add(LiveclassPeer.COURSE_ID,dir);
+			crit.add(LiveclassPeer.CLASS_NAME,liveclsname);
+			crit.add(LiveclassPeer.CLASS_DATE,startDate);
+			crit.add(LiveclassPeer.CLASS_TIME,startTime);
+			crit.add(LiveclassPeer.CLASS_DURATION,duration);
+			crit.add(LiveclassPeer.PASSKEY,passcode);
+			LiveclassPeer.doInsert(crit);
+		}
+		else{
+			Liveclass ele=(Liveclass)ls1.get(0);
+			int id=ele.getId();
+			crit=new Criteria();
+			crit.add(LiveclassPeer.ID,id);
+			crit.add(LiveclassPeer.COURSE_ID,dir);
+			crit.add(LiveclassPeer.CLASS_NAME,liveclsname);
+			crit.add(LiveclassPeer.CLASS_DATE,startDate);
+			crit.add(LiveclassPeer.CLASS_TIME,startTime);
+			crit.add(LiveclassPeer.CLASS_DURATION,duration);
+			crit.add(LiveclassPeer.PASSKEY,passcode);
+			LiveclassPeer.doUpdate(crit);
+		}
 		String Add = MultilingualUtil.ConvertedString("brih_announce",LangFile);
                 String live = MultilingualUtil.ConvertedString("brih_live",LangFile);
                 String lclass = MultilingualUtil.ConvertedString("brih_class",LangFile);
@@ -137,7 +155,7 @@ public class UploadAnsAction extends SecureAction_Instructor
 		}
 		//send mail to all student
                 try{
-                        String newText="<br>Date :"+startDate+"<br> Time :"+startTime+"<br> URL : https://meet.jit.si/"+liveclsname;
+                        String newText="<br>Date :"+startDate+"<br> Time :"+startTime+"<br> URL : https://meet.jit.si/"+liveclsname+"<br>You can reuse the same classsession multiple times.<br>";
 			int gid = GroupUtil.getGID(dir);
                         int roleId[]={2,3};
                         int userId[]={uid,0};
