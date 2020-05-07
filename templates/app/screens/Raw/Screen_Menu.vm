@@ -33,6 +33,12 @@
 		<tr bgcolor="$ui.menuColor"><td style="height: 8px;"></td></tr>
                 <tr bgcolor="$ui.tableColor">
                         <td class="dt">
+				<a href=$link.setPage("call,Answerbook,AnnounceLiveClass.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","coursemanagement").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_QDannounce $brih_live $brih_class</a>
+                         </td>
+                </tr>
+		<tr bgcolor="$ui.menuColor"><td style="height: 8px;"></td></tr>
+                <tr bgcolor="$ui.tableColor">
+                        <td class="dt">
 				<a href=$link.setPage("call,CourseMgmt_User,CourseContent.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","coursemanagement").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_course $brih_mgmt</a>
                          </td>
                 </tr>
