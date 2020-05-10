@@ -155,6 +155,7 @@ try
    String courseHome=(String)user.getTemp("course_id","");
    ParameterParser pp=data.getParameters();
    String contentTopic=pp.getString("contentTopic","").replaceAll("\\s+", "");
+   contentTopic=contentTopic.replace(".", "");
    String location=pp.getString("course","");
    String Pub=pp.getString("publish","");
    context.put("pub",Pub);

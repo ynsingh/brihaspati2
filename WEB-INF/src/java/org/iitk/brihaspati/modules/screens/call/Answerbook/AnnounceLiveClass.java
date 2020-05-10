@@ -84,9 +84,9 @@ public class AnnounceLiveClass extends SecureScreen_Instructor {
 		String Caname=CourseUtil.getCourseAlias(dir);
 	//	String insid=InstituteDetailsManagement.getInsId(dir);
 		int iid=Integer.parseInt((String)user.getTemp("Institute_id"));
-		String iname=(InstituteIdUtil.getIstName(iid)).replaceAll(" ","_");
+		String iname=(InstituteIdUtil.getIstName(iid)).replaceAll(" ","");
 		String ranst=PasswordUtil.randmPass();
-		String lcname=Caname+"_"+iname+"_"+ranst;
+		String lcname=Caname+iname+ranst;
 		context.put("lcname",lcname);
 
                 String currentdate=ExpiryUtil.getCurrentDate("-");
