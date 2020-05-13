@@ -172,7 +172,7 @@ public class UploadAnsAction extends SecureAction_Instructor
                               crit.add(TurbineUserPeer.USER_ID, usrId);
                               List usrList = TurbineUserPeer.doSelect(crit);
                               String userEmail = ((TurbineUser) usrList.get(0)).getEmail();
-                              Mail_msg=  MailNotificationThread.getController().set_Message("\n\nLive Class is announced in "+courseName+" taught by "+fullName+" ." +"the Information regarding the live class as a link is as given below ."+"<br>"+newText +"."+"<br>"+fullName, "", "", "", userEmail, "Live Class Accounced", "", LangFile);
+                              Mail_msg=  MailNotificationThread.getController().set_Message("\n\nLive Class is announced in "+courseName+" taught by "+fullName+" ." +"the Information regarding the live class as a link is as given below ."+"<br>"+newText +"."+"<br>"+fullName, "", "", "", userEmail, "Live Class Announced", "", LangFile);
                            }
                            if(Mail_msg.equals("Success")) {
                               crit = new Criteria();
