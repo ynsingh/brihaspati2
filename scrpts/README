@@ -1,0 +1,7 @@
+For developement use thes files
+react-dom.development.js
+react.development.js
+
+For Production use these files
+react.production.min.js
+react-dom.production.min.js
