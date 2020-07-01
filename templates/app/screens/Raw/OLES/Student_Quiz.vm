@@ -113,35 +113,35 @@ $!data.getMessage()
 	##Drop down list to select a quiz
 <table align="left" width="100%" bgcolor="$ui.tableColor">
 
-#if($quizList.size()!=0)
+	#if($quizList.size()!=0)
 	<tr bgcolor="$ui.menuColor">
 		<td align="left">
 	      		<b>$brih_select  $brih_quiz</b>
-	   </td>
-#end
+	   	</td>
+##	#end
 	   	<td  align="left">
 	        	#if($isFile!="")
-	        		#if($quizList.size()!=0)
+	        ##		#if($quizList.size()!=0)
 	        			<select name="quizList" class="drop">
 	        				#foreach($qid in $quizList)	        				
 	        					<option value="$qid.getQuizID(),$qid.getMaxTime()">$qid.getQuizName()</option>
 	        				#end
 	        			</select> &nbsp;&nbsp;&nbsp;&nbsp;
-				#else
-			<td bgcolor="$ui.menuColor" align="center" width="100%">
-					$!data.getMessage() !!!!
-				#end	
-</td>
+		##		#else
+		##	<td bgcolor="$ui.menuColor" align="center" width="100%">
+		##			$!data.getMessage() !!!!
+		##		#end	
+			</td>
 	        	#else
 			<td bgcolor="$ui.menuColor" align="center" width="100%">
 	        		$!data.getMessage() !!!!
 	        	#end
-</td>
+			</td>
 		</td>
 	</tr>
 	#if($type!="practice")
 		#if($isFile!="")
-			#if($quizList.size()!=0)
+##			#if($quizList.size()!=0)
 				<tr bgcolor="$ui.tableColor">
 					<td align="left"><b>$brih_enter $brih_security $brih_num</b></td>
 					<td align="left">
@@ -152,20 +152,27 @@ $!data.getMessage()
                                 <td align="left"><font color="blue">$brih_SecurityInst</font></td>
                                 </tr>
 
-			#end
+##			#end
 		#end
 	#end
-#if($quizList.size()!=0)
+##	#if($quizList.size()!=0)
 	<tr bgcolor="$ui.menuColor">
 		<td align=left colspan="2">
-			#if($type=="practice")
+		#if($type=="practice")
 	        	<input type="button" class="button-ftextstyle" name="eventSubmit_attemptPracticeQuiz" value="$brih_startquiz" onClick="confirmQuizStart1(document.frm,this);">
         	#else
 	        	<input type="button" name="eventSubmit_attemptQuiz" class="button-ftextstyle" value="$brih_startquiz" onClick="confirmQuizStart(document.frm,this,'$securityData','$ip');">
 	        #end
-#end
+##	#end
 		</td>
 	</tr>
+	#else
+	<tr>
+		<td bgcolor="$ui.menuColor" align="center" width="100%">
+		$!data.getMessage() !!!!
+		</td>
+	</tr>
+	#end	
 </table>	
 ##</tr>
 ##</table>

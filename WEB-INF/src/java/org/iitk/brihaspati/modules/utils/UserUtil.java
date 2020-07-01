@@ -98,6 +98,7 @@ public class UserUtil
 			LoginName=element.getUserName().toString();
 		}
 		catch(Exception e){
+			ErrorDumpUtil.ErrorLog("inside exception : userutil:getLoginName "+e);
 			//log something
 		}
 		return LoginName;

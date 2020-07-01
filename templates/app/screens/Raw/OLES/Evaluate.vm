@@ -82,7 +82,10 @@ $!data.getMessage()
 		#elseif($tdcolor == "3")
 			<td bgcolor="#AFDCEC">
 		#end
-		<b><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> #if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end</I></b></a></td>
+		<b><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> 
+			##if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end
+			#if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_schedule #else $brih_schedule $brih_exam #end
+		</I></b></a></td>
 			#if($tdcolor != "6")
                         <td>
                 #elseif($tdcolor == "6")
@@ -139,11 +142,11 @@ $!data.getMessage()
 </table>
 <table width="100%" >
 		#if($type=="result" && $quizID!="")
-		#if($flag==false)
-                #set($headings=["","$brih_student $brih_name","$brih_score/$brih_total $brih_marks","$brih_percentage","$brih_min $brih_passing $brih_marks","$brih_result","$brih_answer $brih_sheet"])
-		#else
-                #set($headings=["$brih_student $brih_name","$brih_score/$brih_total $brih_marks","$brih_percentage","$brih_min $brih_passing $brih_marks","$brih_result","$brih_answer $brih_sheet"])
-		#end
+			#if($flag==false)
+        	        	#set($headings=["","$brih_student $brih_name","$brih_score/$brih_total $brih_marks","$brih_percentage","$brih_min $brih_passing $brih_marks","$brih_result","$brih_answer $brih_sheet"])
+			#else
+		                #set($headings=["$brih_student $brih_name","$brih_score/$brih_total $brih_marks","$brih_percentage","$brih_min $brih_passing $brih_marks","$brih_result","$brih_answer $brih_sheet"])
+			#end
                 <tr bgcolor="$ui.tableColor">
                         #foreach($heading in $headings)
                         <td align="left">
@@ -194,7 +197,14 @@ $!data.getMessage()
 			#end
 		</tr>
 		#end
-		#if($type=="result" && $quizID!="" && $flag==false)
+		#if($total_size == 0)
+		<tr>
+		<td colspan="7">
+		$brih_quizres
+		</td>
+		</tr>
+		#end
+		#if(($type=="result") && ($quizID!="") && ($flag==false) && ($total_size!=0))
                 <tr bgcolor="$ui.menuColor" >
                 <td colspan="7">
                 <input type="CHECKBOX" name="checkAll" onClick=selectAll(this);>

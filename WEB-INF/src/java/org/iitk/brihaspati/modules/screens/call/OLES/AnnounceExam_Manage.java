@@ -91,13 +91,15 @@ public class AnnounceExam_Manage extends SecureScreen{
 
             	File file=new File(filePath+"/"+quizPath);
 		Vector quizList=new Vector();
+		Vector tallquizList=new Vector();
 		Vector finalQuizList=new Vector();
+		//Vector finalaQuizList=new Vector();
 		QuizMetaDataXmlReader quizmetadata=null;
 		if(file.exists()){
 			context.put("isFile","exist");
 			quizmetadata=new QuizMetaDataXmlReader(filePath+"/"+quizPath);				
 			quizList=quizmetadata.listActiveAndCurrentlyNotRunningQuiz(filePath+"/"+quizPath,uname);
-			if(quizList!=null && quizList.size()!=0){
+		/*	if(quizList!=null && quizList.size()!=0){
 				for(int i=0;i<quizList.size();i++){
 					String quizName =((QuizFileEntry) quizList.elementAt(i)).getQuizName();
 					String quizMode = ((QuizFileEntry) quizList.elementAt(i)).getQuizMode();
@@ -115,6 +117,11 @@ public class AnnounceExam_Manage extends SecureScreen{
 					context.put("quizList",finalQuizList);	              
 //				}
 			}
+			*/
+			context.put("quizList",quizList); 
+			quizmetadata=new QuizMetaDataXmlReader(filePath+"/"+quizPath);
+			tallquizList=quizmetadata.listAnnouncedQuiz();
+			context.put("tallquizList",tallquizList);
 		}
 		else
 		context.put("isFile","");

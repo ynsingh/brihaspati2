@@ -9,7 +9,7 @@
  * @modify date: 14aug2013
  * Contributors: Members of MHRD Project DEI Agra, IITK
 *#
-$page.setTitle("Announce Exam")
+$page.setTitle("Schedule Exam")
 $page.setBgColor("bgcolor")
 
 <head>
@@ -26,7 +26,8 @@ $!data.getMessage()
 		<a href=$link.setPage("Index.vm") style='text-decoration:none'>$brih_home</a>|
 		<a href=$link.setPage("call,CourseMgmt_User,CourseHome.vm") style='text-decoration:none'>$course</a> |
 		 <a href=$link.setPage("call,OLES,Oles_QB.vm").addPathInfo("count","1") style='text-decoration:none'> $online_online $brih_examat $brih_system</a>|
-		#if($lang=="hindi")$brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end
+		##if($lang=="hindi")$brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end
+		#if($lang=="hindi")$brih_exam $brih_schedule #else $brih_schedule $brih_exam #end
 	</b></td>
 ## Creating the links for help regarding FAQ 
 	<td align=right><img src="$content.getURI("/images/hand.gif")"><a href=javascript:popupWin("/brihaspati/docs/OLES_Quiz.html","newWin") style='text-decoration:none'>$brih_help</a></td>
@@ -47,7 +48,7 @@ $!data.getMessage()
         	#elseif($tdcolor == "1")
 			<td bgcolor="#AFDCEC">
 		#end
-		<b><I><a href=$link.setPage("call,OLES,Announce_Exam.vm").addPathInfo("count","1").addPathInfo("mode","$mode").addPathInfo("quizID","$quizID").addPathInfo("quizName","$quizName").addPathInfo("maxTime","$maxTime").addPathInfo("maxMarks","$maxMarks").addPathInfo("noQuestions","$noQuestions").addPathInfo("creationDate","$creationDate").addPathInfo("Start_year","$Start_year").addPathInfo("Start_mon","$Start_mon").addPathInfo("Start_day","$Start_day").addPathInfo("Start_hr","$Start_hr").addPathInfo("Start_min","$Start_min").addPathInfo("End_year","$End_year").addPathInfo("End_mon","$End_mon").addPathInfo("End_day","$End_day").addPathInfo("End_hr","$End_hr").addPathInfo("End_min","$End_min").addPathInfo("allowPractice","$allowPractice") style=text-decoration:none>$brih_new $brih_announcement</I></b></a></td>
+		<b><I><a href=$link.setPage("call,OLES,Announce_Exam.vm").addPathInfo("count","1").addPathInfo("mode","$mode").addPathInfo("quizID","$quizID").addPathInfo("quizName","$quizName").addPathInfo("maxTime","$maxTime").addPathInfo("maxMarks","$maxMarks").addPathInfo("noQuestions","$noQuestions").addPathInfo("creationDate","$creationDate").addPathInfo("Start_year","$Start_year").addPathInfo("Start_mon","$Start_mon").addPathInfo("Start_day","$Start_day").addPathInfo("Start_hr","$Start_hr").addPathInfo("Start_min","$Start_min").addPathInfo("End_year","$End_year").addPathInfo("End_mon","$End_mon").addPathInfo("End_day","$End_day").addPathInfo("End_hr","$End_hr").addPathInfo("End_min","$End_min").addPathInfo("allowPractice","$allowPractice") style=text-decoration:none>$brih_new $brih_schedule</I></b></a></td>
 		#if($tdcolor != "2")
              		<td>
         	#elseif($tdcolor == "2")
@@ -74,7 +75,8 @@ $!data.getMessage()
 		</tr>
 	#else
 		<tr bgcolor="$ui.menuColor" width="100%">
-			<td align="left" width="100%" colspan="5"><b><i><font size="3"> $brih_QDannounce </font><b></i></td>
+			##<td align="left" width="100%" colspan="5"><b><i><font size="3"> $brih_QDannounce </font><b></i></td>
+			<td align="left" width="100%" colspan="5"><b><i><font size="3"> $brih_schedule </font><b></i></td>
 		</tr>
 		#set($display="display")
 	#end
@@ -317,6 +319,7 @@ $!data.getMessage()
 	</tr>
     	 
         <tr style="visibility:$setVisible">
+        ##<tr>
 		<td><b>$brih_result $brih_Da</b></td>
 		<td>
                 	<select name="Res_year" id="res1" class="drop">
@@ -361,7 +364,8 @@ $!data.getMessage()
 				#if($mode=="update")
 					<option value="$Res_day">$Res_day
 				#else
-					<option value="$eDate">$eDate
+					##<option value="$eDate + 1">$eDate + 1
+					<option value="$rDate">$rDate
 				#end
 				#foreach($dy in $day)
 					#if($mode=="update")

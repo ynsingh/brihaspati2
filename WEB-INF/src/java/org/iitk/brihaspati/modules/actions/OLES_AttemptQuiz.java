@@ -311,6 +311,8 @@ public class OLES_AttemptQuiz extends SecureAction{
 			//String b=""; 
 			//PRAJWAL gaurav sah
 			String curdate=ExpiryUtil.getCurrentDate("-");
+//			ErrorDumpUtil.ErrorLog("criteria is tQuiz[OLES_AttemptQuiz] method:attemptQuiz0 "+curdate);
+
 			Criteria cr=new Criteria();
 			//cr.add(QuizIpaddressPeer.ID)
 			cr.add(QuizIpaddressPeer.USER_ID,uid);
@@ -320,10 +322,10 @@ public class OLES_AttemptQuiz extends SecureAction{
 			cr.add(QuizIpaddressPeer.QUIZ_STIME,a);
 			cr.add(QuizIpaddressPeer.QUIZ_ETIME,b);
 			QuizIpaddressPeer.doInsert(cr);
-		//	ErrorDumpUtil.ErrorLog("criteria is "+cr);
+//			ErrorDumpUtil.ErrorLog("criteria is tQuiz[OLES_AttemptQuiz] method:attemptQuiz "+cr);
 			//log.info("quiz ip added successfully with name  By "+data.getUser().getName()+" | IP Address : "+data.getRemoteAddr());
 		}catch(Exception e){
-			ErrorDumpUtil.ErrorLog("Error in Action[OLES_Quiz] method:attemptQuiz !! "+e);
+			ErrorDumpUtil.ErrorLog("Error in Action[OLES_AttemptQuiz] method:attemptQuiz !! "+e);
 			data.setMessage("See ExceptionLog !!");
 		}
 	}
