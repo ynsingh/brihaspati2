@@ -75,7 +75,8 @@ $!data.getMessage()
                         #elseif($tdcolor == "3")
 			<td bgcolor="#AFDCEC">
 			#end
-			<b><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> #if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end</b></a></td>
+		##	<b><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> #if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end</b></a></td>
+			<b><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> #if($lang =="hindi" || $lang == "gujarati") $brih_exam $brih_schedule #else $brih_schedule $brih_exam #end</b></a></td>
 			#if($tdcolor != "6")
                         <td>
                          #elseif($tdcolor == "6")
@@ -128,7 +129,6 @@ $!data.getMessage()
                 #else
                         <tr bgcolor="$ui.menuColor" width="100%"><td align="left" width="100%" colspan="8"> #if($lang =="hindi" || $lang == "gujarati") $brih_queBank $brih_in $brih_question $brih_arenotexists #else $brih_question $brih_arenotexists $brih_in $brih_queBank #end </td></tr>
                 #end
-
 
 		#foreach ($topics in $allTopics)
 				#if($velocityCount%2==0)

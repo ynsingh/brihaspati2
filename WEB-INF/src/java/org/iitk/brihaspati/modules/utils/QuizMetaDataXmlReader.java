@@ -915,8 +915,11 @@ public class QuizMetaDataXmlReader{
 					if(examDate==null){}
 					else{
 						Calendar current = Calendar.getInstance();
+								//ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader - current date is "+current);
 						Calendar examDt = Calendar.getInstance();
 						examDt.clear();
+						Calendar examDt2 = Calendar.getInstance();
+						examDt2.clear();
 						Calendar expiryDt = Calendar.getInstance();
 						expiryDt.clear();
 						String [] exDt = examDate.split("-");
@@ -924,12 +927,21 @@ public class QuizMetaDataXmlReader{
 						String [] stTime = startTime.split(":");
 						String [] enTime = endTime.split(":");
 						examDt.set(Integer.parseInt(exDt[0]),(Integer.parseInt(exDt[1])-1), Integer.parseInt(exDt[2]),Integer.parseInt(stTime[0]),Integer.parseInt(stTime[1]));
+						examDt2.set(Integer.parseInt(exDt[0]),(Integer.parseInt(exDt[1])-1), Integer.parseInt(exDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
 						expiryDt.set(Integer.parseInt(expDt[0]),(Integer.parseInt(expDt[1])-1), Integer.parseInt(expDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
-						if(current.compareTo(examDt)==1 || current.compareTo(examDt)==0){
+			//			int ii=current.compareTo(examDt);
+			//			int ii2=current.compareTo(examDt2);
+			//			int iii=current.compareTo(expiryDt);
+			//			ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader check the compare result  exam date "+ii);
+			//			ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader check the compare result  exam date 2"+ii2);
+			//			ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader check the compare result  expiry date "+iii);
+						if((current.compareTo(examDt)==1 || current.compareTo(examDt)==0)&&(current.compareTo(examDt2)== -1)){
 							if(current.compareTo(expiryDt)==1 || current.compareTo(expiryDt)==0){
-							//	ErrorDumpUtil.ErrorLog("quiz is expired !");
+//								ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader quiz is expired !");
 							}
 							else{
+			//					ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader inside else - exam date date is "+examDt);
+			//					ErrorDumpUtil.ErrorLog("QuizMetaDataXmlReader inside else- expiry date is "+expiryDt);
 								fileEntry.setQuizID(quizid);
 								fileEntry.setQuizName(quizName);
 								fileEntry.setMaxMarks(maxMarks);
@@ -1048,7 +1060,7 @@ public class QuizMetaDataXmlReader{
 		Vector vt=new Vector();
 		try{
 			XmlData files[]=xr.getElements("QuizQuestions");
-                        ErrorDumpUtil.ErrorLog("----QuizMetaDataXmlReader----getFinalAnswer()-->");
+                      //  ErrorDumpUtil.ErrorLog("----QuizMetaDataXmlReader----getFinalAnswer()-->");
 			if(files!=null){
 				Attributes ats;
 				String questionID,fileName,answer,awardedMarks,studentAnswer,instructorAnswer,question,questionMarks,min,max;
@@ -1128,7 +1140,7 @@ public class QuizMetaDataXmlReader{
 		Vector vt=new Vector();
 		try{
 			XmlData files[]=xr.getElements("QuizQuestions");
-                        ErrorDumpUtil.ErrorLog("----QuizMetaDataXmlReader----getFinalAnswer()--> overloading method calling");
+                     //   ErrorDumpUtil.ErrorLog("----QuizMetaDataXmlReader----getFinalAnswer()--> overloading method calling");
 			String crsId=courseid;
 			String userName=username;
 			String Questbankpath=quesbankpath;
@@ -1150,12 +1162,12 @@ public class QuizMetaDataXmlReader{
 					question = ats.getValue("Question");
 					fileName=ats.getValue("FileName");
 					QuestionPath=Questbankpath+"/"+fileName;
-					ErrorDumpUtil.ErrorLog("QuestionPath"+QuestionPath);
+		//			ErrorDumpUtil.ErrorLog("QuestionPath"+QuestionPath);
 					TopicMetaDataXmlReader tr=null;
 					tr =new TopicMetaDataXmlReader(QuestionPath);
                         		Vector Read=new Vector();
 					Read=tr.getQuesBank_Detail();
-					ErrorDumpUtil.ErrorLog("Size of the quesbank.xml"+Read.size());
+		//			ErrorDumpUtil.ErrorLog("Size of the quesbank.xml"+Read.size());
 					for(int n=0;n<Read.size();n++)
                         	        	{
 							if(questionID.equals(((FileEntry)Read.elementAt(n)).getquestionid()))
@@ -1169,8 +1181,8 @@ public class QuizMetaDataXmlReader{
 					td=new TopicMetaDataXmlReader(qbpath);
 					Vector vec=new Vector();
 					vec=td.getQuesBanklist_Detail();
-					ErrorDumpUtil.ErrorLog(qbpath);
-					ErrorDumpUtil.ErrorLog("Size of qblist is "+vec.size());
+		//			ErrorDumpUtil.ErrorLog(qbpath);
+		//			ErrorDumpUtil.ErrorLog("Size of qblist is "+vec.size());
 					for(int k=0;k<vec.size();k++)
 						{
 							//ErrorDumpUtil.ErrorLog("topic name  "+((FileEntry)vec.elementAt(k)).getfileName());
@@ -1180,7 +1192,7 @@ public class QuizMetaDataXmlReader{
 								     break;
 								}
 						}
-					ErrorDumpUtil.ErrorLog("image folder"+edtopic);
+		//			ErrorDumpUtil.ErrorLog("image folder"+edtopic);
 					if(!imgurl.equals(""))
 						{
 					File file1=new File(Questbankpath+"/"+edtopic+"/"+imgurl);
@@ -1434,6 +1446,78 @@ public class QuizMetaDataXmlReader{
 	}
 
 	/**
+	 * This method gets the list of all the quizzes which are announced
+	 * @return vector
+	 * @exception generic Exception
+	 * @author N K Singh
+	 */
+	public Vector listAnnouncedQuiz(){
+		Vector vt = new Vector();
+		try{
+			XmlData files[]=xr.getElements("Quiz");
+			if(files!=null){
+				Attributes ats;
+				String quizid,quizName,creationDate,examDate,expiryDate,startTime,endTime,modifiedDate;
+				String maxTime,maxMarks,maxQuestions;
+				for(int j=0;j<files.length;j++){
+					QuizFileEntry fileEntry=new QuizFileEntry();
+					ats=files[j].getAttributes();
+					quizid=ats.getValue("QuizID");
+					quizName=ats.getValue("QuizName");
+					maxMarks=ats.getValue("MaxMarks");
+					maxTime=ats.getValue("MaxTime");
+					maxQuestions=ats.getValue("NumberQuestion");
+					creationDate=ats.getValue("CreationDate");
+					examDate=ats.getValue("ExamDate");
+					expiryDate=ats.getValue("ExpiryDate");
+					startTime=ats.getValue("StartTime");
+					endTime=ats.getValue("EndTime");
+					modifiedDate=ats.getValue("ModifiedDate");
+					if(examDate==null){}
+					else{
+				/*		Calendar current = Calendar.getInstance();
+						Calendar examDt = Calendar.getInstance();
+						examDt.clear();
+						Calendar expiryDt = Calendar.getInstance();
+						expiryDt.clear();
+						String [] exDt = examDate.split("-");
+						String [] expDt = expiryDate.split("-");
+						String [] stTime = startTime.split(":");
+						String [] enTime = endTime.split(":");
+						examDt.set(Integer.parseInt(exDt[0]),(Integer.parseInt(exDt[1])-1), Integer.parseInt(exDt[2]),Integer.parseInt(stTime[0]),Integer.parseInt(stTime[1]));
+						expiryDt.set(Integer.parseInt(expDt[0]),(Integer.parseInt(expDt[1])-1), Integer.parseInt(expDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
+						if(current.compareTo(examDt)==1 || current.compareTo(examDt)==0){
+							//ErrorDumpUtil.ErrorLog("exam date is announced before the current date !");
+							if(current.compareTo(expiryDt)==1 || current.compareTo(expiryDt)==0){
+								fileEntry.setQuizID(quizid);
+								fileEntry.setQuizName(quizName);
+								fileEntry.setMaxMarks(maxMarks);
+								fileEntry.setMaxTime(maxTime);
+								fileEntry.setnoQuestion(maxQuestions);
+								vt.add(fileEntry);
+								//ErrorDumpUtil.ErrorLog("list of expired quizzes !");
+							}
+					}*/
+								fileEntry.setQuizID(quizid);
+								fileEntry.setQuizName(quizName);
+								fileEntry.setMaxMarks(maxMarks);
+								fileEntry.setMaxTime(maxTime);
+								fileEntry.setnoQuestion(maxQuestions);
+								fileEntry.setExamDate(examDate);
+								fileEntry.setStartTime(startTime);
+								fileEntry.setEndTime(endTime);
+								vt.add(fileEntry);
+						}
+				}
+				return vt;
+			}
+		}catch(Exception e){
+			ErrorDumpUtil.ErrorLog("Error in Util[QuizMetaDataXmlReader] method:getInsertedQuizQuestionID !! "+e);
+			//data.setMessage("See Exception Log !!");
+		}
+		return null;
+	}
+	/**
 	 * This method gets the list of all the quizzes which are announced and announced time is over
 	 * @return vector
 	 * @exception generic Exception
@@ -1472,11 +1556,11 @@ public class QuizMetaDataXmlReader{
 						String [] expDt = expiryDate.split("-");
 						String [] stTime = startTime.split(":");
 						String [] enTime = endTime.split(":");
-						examDt.set(Integer.parseInt(exDt[0]),(Integer.parseInt(exDt[1])-1), Integer.parseInt(exDt[2]),Integer.parseInt(stTime[0]),Integer.parseInt(stTime[1]));
-						expiryDt.set(Integer.parseInt(expDt[0]),(Integer.parseInt(expDt[1])-1), Integer.parseInt(expDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
+						examDt.set(Integer.parseInt(exDt[0]),(Integer.parseInt(exDt[1])-1), Integer.parseInt(exDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
+		//				expiryDt.set(Integer.parseInt(expDt[0]),(Integer.parseInt(expDt[1])-1), Integer.parseInt(expDt[2]),Integer.parseInt(enTime[0]),Integer.parseInt(enTime[1]));
 						if(current.compareTo(examDt)==1 || current.compareTo(examDt)==0){
 							//ErrorDumpUtil.ErrorLog("exam date is announced before the current date !");
-							if(current.compareTo(expiryDt)==1 || current.compareTo(expiryDt)==0){
+	//						if(current.compareTo(expiryDt)==1 || current.compareTo(expiryDt)==0){
 								fileEntry.setQuizID(quizid);
 								fileEntry.setQuizName(quizName);
 								fileEntry.setMaxMarks(maxMarks);
@@ -1484,7 +1568,7 @@ public class QuizMetaDataXmlReader{
 								fileEntry.setnoQuestion(maxQuestions);
 								vt.add(fileEntry);
 								//ErrorDumpUtil.ErrorLog("list of expired quizzes !");
-							}
+	//						}
 						}
 					}
 				}

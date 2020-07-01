@@ -48,6 +48,7 @@ import org.apache.velocity.context.Context;
 //import org.apache.commons.fileupload.FileItem;
 import org.apache.turbine.util.parser.ParameterParser;
 import org.apache.turbine.services.servlet.TurbineServlet;
+import org.apache.commons.lang.StringUtils;
 //Brihaspati
 //import org.iitk.brihaspati.modules.utils.CourseUserDetail;
 //import org.iitk.brihaspati.modules.utils.CourseUtil;
@@ -1936,8 +1937,10 @@ public class OLES_Quiz extends SecureAction{
 
 			String endDate = endYear+"-"+endMonth+"-"+endDay;
 			String endTime = endHour+":"+endMinute;
-			String resDate = resYear+"-"+resMonth+"-"+resDay;
-
+			String resDate="";
+			if(!(StringUtils.isBlank(resYear))){
+				resDate = resYear+"-"+resMonth+"-"+resDay;
+			}
 			Calendar current = Calendar.getInstance();
 			Calendar examDate = Calendar.getInstance();
 			examDate.clear();
@@ -1982,6 +1985,7 @@ public class OLES_Quiz extends SecureAction{
 				data.setMessage(MultilingualUtil.ConvertedString("brih_datemsg",LangFile));
 			}
 
+			if(!(StringUtils.isBlank(resDate))){
 			if(resDate.compareTo(endDate)==0){
 					data.setMessage(MultilingualUtil.ConvertedString("brih_resdatgrtEnd",LangFile)); //updated by ankita dwivedi
 					return;
@@ -1989,6 +1993,7 @@ public class OLES_Quiz extends SecureAction{
 			else if(resDate.compareTo(endDate)==-1){
 				data.setMessage(MultilingualUtil.ConvertedString("brih_resdatgrtEnd",LangFile));	//updated by ankita dwivedi
 				return;
+			}
 			}
 			/**In this part after get the start time/date end time/date and result data
 			 *by reading xml  get all details of Quiz.xml
@@ -2024,7 +2029,7 @@ public class OLES_Quiz extends SecureAction{
                           	*/
 				String str=OnlineExamSystemMail.SendMail(courseID,data.getUser().getName(),"announce",startDate,startTime,"","",LangFile);
 				if(str.equals("Success"))
-				str=" "+MultilingualUtil.ConvertedString("mail_msg",LangFile);
+					str=" "+MultilingualUtil.ConvertedString("mail_msg",LangFile);
                         	data.addMessage(str);
 				data.setScreenTemplate("call,OLES,AnnounceExam_Manage.vm");
 

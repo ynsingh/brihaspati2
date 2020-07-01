@@ -130,8 +130,9 @@ public class Oles_QB extends SecureScreen{
 						for(int i=0;i<allTopics.size();i++)
         	                        	{//for
 							String topicnew=((FileEntry) allTopics.elementAt(i)).getTopic();
-							if(!allcomtopics.contains(topicnew))
+							if(!(allcomtopics.contains(topicnew)))
                                 	        	{
+
 								QuizFileEntry fileEntry=new QuizFileEntry();
 								String questiontype=((FileEntry) allTopics.elementAt(i)).getTypeofquestion();
 								String difflevel=((FileEntry) allTopics.elementAt(i)).getDifflevel();
@@ -145,8 +146,9 @@ public class Oles_QB extends SecureScreen{
 					}
 				}
 			}
-			if(allcomtopics==null)
+			if(allcomtopics==null){
                         return;
+			}
                         if(allcomtopics.size()!=0)
                         {
 				String path=data.getServletContext().getRealPath("/WEB-INF")+"/conf"+"/InstituteProfileDir"+"/"+instid+"Admin.properties";

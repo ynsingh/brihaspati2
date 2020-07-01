@@ -142,20 +142,20 @@ public class Attempt_Quiz extends SecureScreen
 			if(!quizIDTime.isEmpty()){
 				String quizIDTimeArray[] = quizIDTime.split(",");
 				quizID = quizIDTimeArray[0];
-				//maxTime = quizIDTimeArray[1];no need !@uthor PRAJWAL GAURAV SAH
+//				maxTime = quizIDTimeArray[1];//no need !@uthor PRAJWAL GAURAV SAH
 			}
 			else{
 				quizID = pp.getString("quizID","");
-				//maxTime = pp.getString("maxTime","");no need !@uthor PRAJWAL GAURAV SAH
+//				maxTime = pp.getString("maxTime","");//no need !@uthor PRAJWAL GAURAV SAH
 			}
 
 			context.put("quizID",quizID);
-			//context.put("maxTime",maxTime);
+		//	context.put("maxTime",maxTime);
 			String quesID,fileName,quesType,markPerQues;
 			quesID=fileName=quesType=markPerQues="";
 			quesType = pp.getString("quesType","");
 			String quesDetail = pp.getString("quesDetail","");
-			//ErrorDumpUtil.ErrorLog(" string quesDetail is"+quesDetail);
+			ErrorDumpUtil.ErrorLog(" string quesDetail is"+quesDetail);
 
 			if(quesDetail.isEmpty()){
 				markPerQues = pp.getString("markPerQues","");
@@ -277,16 +277,16 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
                         	}
 					
 
-					String stdqendtime="";
-  					if(Stdendtime.equals(""))
-						{
-							SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-							Date d1 = null;
-							Date d2 = null;
-							d1 = format.parse(Stdstarttime);
+				String stdqendtime="";
+  				if(Stdendtime.equals(""))
+				{
+					SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+					Date d1 = null;
+					Date d2 = null;
+					d1 = format.parse(Stdstarttime);
 							//ErrorDumpUtil.ErrorLog("Student Start time in d1"+d1);
-							String d="00:"+maxi_time;
-							int z,hrs,min,sec;
+					String d="00:"+maxi_time;
+					int z,hrs,min,sec;
 					/*if(d.indexOf(":")==-1){
 				 		z=Integer.parseInt(d);
 								}
@@ -295,43 +295,43 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 						z=Integer.parseInt(maxtimeArray[1]);
 						
 					   }*/
-						String maxtimeArray[] = Stdstarttime.split(":");
-						hrs=Integer.parseInt(maxtimeArray[0]);
-						min=Integer.parseInt(maxtimeArray[1]);
-						sec=Integer.parseInt(maxtimeArray[2]);
-						String maxi_timeArray[]=maxi_time.split(":");
-						float duration_maxtime=Float.parseFloat(maxi_timeArray[0]);
+					String maxtimeArray[] = Stdstarttime.split(":");
+					hrs=Integer.parseInt(maxtimeArray[0]);
+					min=Integer.parseInt(maxtimeArray[1]);
+					sec=Integer.parseInt(maxtimeArray[2]);
+					String maxi_timeArray[]=maxi_time.split(":");
+					float duration_maxtime=Float.parseFloat(maxi_timeArray[0]);
 						
-						float duration1=duration_maxtime/60;
-						String duration_string=Float.toString(duration1);
-						String duration1_timeArray[]=duration_string.split("\\.");
-						int duration_hr=Integer.parseInt(duration1_timeArray[0]);
-						float duration_min=Float.parseFloat("."+duration1_timeArray[1]);
+					float duration1=duration_maxtime/60;
+					String duration_string=Float.toString(duration1);
+					String duration1_timeArray[]=duration_string.split("\\.");
+					int duration_hr=Integer.parseInt(duration1_timeArray[0]);
+					float duration_min=Float.parseFloat("."+duration1_timeArray[1]);
 					//	ErrorDumpUtil.ErrorLog("value of duration hrs and min  "+duration_hr+"  "+duration_min);
 						
-						int End_min=(int)(duration_min*60)+min;
-						int final_min,final_hr;
-						String Final_end_time="";
-						if(End_min>=60)
-							{
-								final_min=End_min-60;
-								final_hr=hrs+duration_hr+1;
-								String str_final_min=Integer.toString(final_min);
-								String str_final_hr=Integer.toString(final_hr);
-								Final_end_time=str_final_hr+":"+str_final_min+":"+maxtimeArray[2];
-								//ErrorDumpUtil.ErrorLog("value of final end time is   "+Final_end_time);
-								
-							}
-						else
-							{
-								final_min=End_min;
-								final_hr=hrs+duration_hr;
-								String str_final_min=Integer.toString(final_min);
-								String str_final_hr=Integer.toString(final_hr);
-								Final_end_time=str_final_hr+":"+str_final_min+":"+maxtimeArray[2];
-								//ErrorDumpUtil.ErrorLog("value of final end time in else 1   "+Final_end_time);
-								
-							}
+					int End_min=(int)(duration_min*60)+min;
+					int final_min,final_hr;
+					String Final_end_time="";
+					if(End_min>=60)
+					{
+						final_min=End_min-60;
+						final_hr=hrs+duration_hr+1;
+						String str_final_min=Integer.toString(final_min);
+						String str_final_hr=Integer.toString(final_hr);
+						Final_end_time=str_final_hr+":"+str_final_min+":"+maxtimeArray[2];
+						//ErrorDumpUtil.ErrorLog("value of final end time is   "+Final_end_time);
+							
+					}
+					else
+					{
+						final_min=End_min;
+						final_hr=hrs+duration_hr;
+						String str_final_min=Integer.toString(final_min);
+						String str_final_hr=Integer.toString(final_hr);
+						Final_end_time=str_final_hr+":"+str_final_min+":"+maxtimeArray[2];
+						//ErrorDumpUtil.ErrorLog("value of final end time in else 1   "+Final_end_time);
+					
+					}
 						// update in database in place of xml
 						// start here
 				/*		QuizMetaDataXmlWriter writer=new QuizMetaDataXmlWriter();
@@ -345,10 +345,10 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 						
 						// set security=null and end time= final end time on the basis of useid and quizid
 						// start here	
-						List v=null;
-						String queryString="Update QUIZ_IPADDRESS set QUIZ_ETIME='"+Final_end_time+"' where USER_ID='"+uid+"' and  QUIZ_ID='"+quizID+"'" ;
+					List v=null;
+					String queryString="Update QUIZ_IPADDRESS set QUIZ_ETIME='"+Final_end_time+"' where USER_ID='"+uid+"' and  QUIZ_ID='"+quizID+"'" ;
 						//ErrorDumpUtil.ErrorLog("update time and ipafter query------> "+queryString);
-						QuizIpaddressPeer.executeStatement(queryString);
+					QuizIpaddressPeer.executeStatement(queryString);
 						
 
 					//long c=d1.getTime();
@@ -365,41 +365,45 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 				new_max_time=hour+":"+minute+":"+second;*/
 				//ErrorDumpUtil.ErrorLog("new_max_time isawdawd--------->"+new_max_time);
 					stdqendtime=Final_end_time;
-					}
-				else
+				}
+				else{
 					stdqendtime=Stdendtime;
+				}
 /*This block is for getting start time and end time of server time @uthor PRAJWAL GAURAV SAH and Anand Gupta*/
-			OLES_AttemptQuiz cur=new OLES_AttemptQuiz(); 
-			String a=cur.CurTime();
+				OLES_AttemptQuiz cur=new OLES_AttemptQuiz(); 
+				String a=cur.CurTime();
 			//String a=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime());
 			//ErrorDumpUtil.ErrorLog("Start time and Stdendtime dagadg"+a+"   "+Stdendtime);
-			String b=endTime+":00";
-			String d="00:"+maxi_time;
-			int z;
-			if(d.indexOf(":")==-1){
-				 z=Integer.parseInt(d);
-			}
-			else{
-				String maxtimeArray[] = d.split(":");
-				z=Integer.parseInt(maxtimeArray[1]);
-			}
-			String System_current_timeArray[]=a.split(":");
-						sys_hrs=Integer.parseInt(System_current_timeArray[0]);
-						sys_min=Integer.parseInt(System_current_timeArray[1]);
-						sys_sec=Integer.parseInt(System_current_timeArray[2]);
-			String user_end_timeArray[] = stdqendtime.split(":");
-						user_hrs=Integer.parseInt(user_end_timeArray[0]);
-						user_min=Integer.parseInt(user_end_timeArray[1]);
-						user_sec=Integer.parseInt(user_end_timeArray[2]);
-			String server_end_timeArray[] = b.split(":");
-						server_hrs=Integer.parseInt(server_end_timeArray[0]);
-						server_min=Integer.parseInt(server_end_timeArray[1]);
+				String b=endTime+":00";
+				String d="00:"+maxi_time;
+				int z;
+				if(d.indexOf(":")==-1){
+					z=Integer.parseInt(d);
+				}
+				else{
+					String maxtimeArray[] = d.split(":");
+					z=Integer.parseInt(maxtimeArray[1]);
+				}
+
+				String System_current_timeArray[]=a.split(":");
+				sys_hrs=Integer.parseInt(System_current_timeArray[0]);
+				sys_min=Integer.parseInt(System_current_timeArray[1]);
+				sys_sec=Integer.parseInt(System_current_timeArray[2]);
+
+				String user_end_timeArray[] = stdqendtime.split(":");
+				user_hrs=Integer.parseInt(user_end_timeArray[0]);
+				user_min=Integer.parseInt(user_end_timeArray[1]);
+				user_sec=Integer.parseInt(user_end_timeArray[2]);
+
+				String server_end_timeArray[] = b.split(":");
+				server_hrs=Integer.parseInt(server_end_timeArray[0]);
+				server_min=Integer.parseInt(server_end_timeArray[1]);
 			//ErrorDumpUtil.ErrorLog("first time adding value"+sys_hrs+"  "+user_hrs+"  "+sys_min+"  "+user_min);
-		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-		Date d1 = null;
-		Date d2 = null;
-		Date d3 = null;
-		Date d4 = null;
+				SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+				Date d1 = null;
+				Date d2 = null;
+				Date d3 = null;
+				Date d4 = null;
 				d1 = format.parse(a);
 				d2 = format.parse(stdqendtime);
 				d3 = format.parse(b);
@@ -427,24 +431,24 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 							maxtime=0;
 						}	
 					}*/
-						if(user_hrs>server_hrs)
-						{
-							check=0;
-						maxitime=x;
-						//ErrorDumpUtil.ErrorLog("x and check--------->  "+x+" "+check);
-						}
-						else if(user_hrs==server_hrs && user_min>server_min)
-						{
-							check=0;
-						maxitime=x;
+				if(user_hrs>server_hrs)
+				{
+					check=0;
+					maxitime=x;
+					//ErrorDumpUtil.ErrorLog("x and check--------->  "+x+" "+check);
+				}
+				else if(user_hrs==server_hrs && user_min>server_min)
+				{
+					check=0;
+					maxitime=x;
 						//ErrorDumpUtil.ErrorLog("else if x and check--------->  "+x);
-						}
-						else
-						{
-							check=1;
-						maxitime=c;
-						//ErrorDumpUtil.ErrorLog("else c and check--------->  "+c+"  "+check);
-						}	  					
+				}
+				else
+				{
+					check=1;
+					maxitime=c;
+					//ErrorDumpUtil.ErrorLog("else c and check--------->  "+c+"  "+check);
+				}	  					
 				long t=maxitime;
 				long time_in_sec=maxitime/1000;
 				long time_in_minutes=time_in_sec/60;
@@ -454,7 +458,7 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 				new_max_time=st_time_in_min+":"+st_time_in_sec;
 				//ErrorDumpUtil.ErrorLog("new_max_time is--------->"+new_max_time);
 				context.put("maxTime",new_max_time);
-				}
+			}
 				//ErrorDumpUtil.ErrorLog("maxitime is"+maxitime);
 
 
@@ -504,16 +508,16 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 			 */
 			if(maxitime>0)
 			{
-			Timer timer = new Timer();
-		    	timer.schedule(new TimerTask(){
-		    	public void run(){
-		    		Attempt_Quiz.msg = 1;
-		    	}
+				Timer timer = new Timer();
+		    		timer.schedule(new TimerTask(){
+			    		public void run(){
+			    			Attempt_Quiz.msg = 1;
+			    		}
 				},maxitime);
 			}	// time above is already in milliseconds @uthor PRAJWAL GAURAV SAH (maxtime*60) * 1000);
 
 		    	//if(msg==1)
-					if(maxitime<=0){
+			if(maxitime<=0){
 		    		data.setMessage(MultilingualUtil.ConvertedString("brih_overQuizTime",LangFile));
 		    		data.setScreenTemplate("call,OLES,Student_Quiz.vm");
 		    	}
@@ -526,37 +530,37 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
 
 			String Final_max_time="";
 			if(check==0)
+			{
+				if(sys_hrs>server_hrs)
 				{
-					if(sys_hrs>server_hrs)
-					{
-						Final_max_time="0:0";
-					}
-					else if(sys_hrs==server_hrs && sys_min>server_min)
-					{
-						Final_max_time="0:0";
-					}
-					else
-					{
-						Final_max_time=new_max_time;
-					}
+					Final_max_time="0:0";
 				}
+				else if(sys_hrs==server_hrs && sys_min>server_min)
+				{
+					Final_max_time="0:0";
+				}
+				else
+				{
+					Final_max_time=new_max_time;
+				}
+			}
 			else
-				{
+			{
 					///ErrorDumpUtil.ErrorLog("check value is 1");
-					if(sys_hrs>user_hrs)
-					{
-						//ErrorDumpUtil.ErrorLog("System hr time is more than end hr time");
-						Final_max_time="0:0";
-					}
-					else if(sys_hrs==user_hrs && sys_min>user_min)
-					{
-						Final_max_time="0:0";
-					}
-					else
-					{
-						Final_max_time=new_max_time;
-					}
+				if(sys_hrs>user_hrs)
+				{
+					//ErrorDumpUtil.ErrorLog("System hr time is more than end hr time");
+					Final_max_time="0:0";
 				}
+				else if(sys_hrs==user_hrs && sys_min>user_min)
+				{
+					Final_max_time="0:0";
+				}
+				else
+				{
+					Final_max_time=new_max_time;
+				}
+			}
 			String timerValue = pp.getString("timerValue","");
 			String timerValueSession = (String)user.getTemp("timerValue");
 			if(timerValue==null || timerValue.equalsIgnoreCase("")){
@@ -604,35 +608,35 @@ show the remaining time !@uthor PRAJWAL GAURAV SAH*/
                         String qbname=parts[0];
                         context.put("qbname",qbname);
 			if(!(fileName.equals(""))){
-                        String qbfilePath=TurbineServlet.getRealPath("/QuestionBank"+"/"+qzowner+"/"+cid);
-			//ErrorDumpUtil.ErrorLog("qbfilePath : "+qbfilePath);
-                        TopicMetaDataXmlReader tmdxr=null;
-			tmdxr =new TopicMetaDataXmlReader(qbfilePath+"/"+fileName);
-                        Vector Read=new Vector();
-                        Read=tmdxr.getQuesBank_Detail1();
-                        if(Read != null)
-                        {
-                                for(int i=0;i<Read.size();i++)
-                                {
-                                        String questonid=((FileEntry)Read.elementAt(i)).getquestionid();
-                                        if(questonid.equals(quesID))
-                                        {
-                                                String Quesimage=((FileEntry)Read.elementAt(i)).getUrl();
-						String new_newfilepath=qbfilePath+"/"+qbname+"/"+Quesimage;
-						if(!Quesimage.equals(""))
-						{
-						 File file1=new File(new_newfilepath);
-		                                	 FileInputStream imageFile=new FileInputStream(file1);
-							 byte imageData[]=new byte[(int)file1.length()];
-						         imageFile.read(imageData);
-						         String imageDataString=Base64.getEncoder().encodeToString(imageData);
-						          imageFile.close();
-							 //ErrorDumpUtil.ErrorLog("The BASE 64 IMAGE IS : "+imageDataString);
-						          context.put("quesimage",imageDataString);
-						}
-                                        }
-                                }
-                        }
+                        	String qbfilePath=TurbineServlet.getRealPath("/QuestionBank"+"/"+qzowner+"/"+cid);
+				//ErrorDumpUtil.ErrorLog("qbfilePath : "+qbfilePath);
+        	                TopicMetaDataXmlReader tmdxr=null;
+				tmdxr =new TopicMetaDataXmlReader(qbfilePath+"/"+fileName);
+                        	Vector Read=new Vector();
+	                        Read=tmdxr.getQuesBank_Detail1();
+        	                if(Read != null)
+                	        {
+                        	        for(int i=0;i<Read.size();i++)
+                                	{
+                                        	String questonid=((FileEntry)Read.elementAt(i)).getquestionid();
+	                                        if(questonid.equals(quesID))
+        	                                {
+                	                                String Quesimage=((FileEntry)Read.elementAt(i)).getUrl();
+							String new_newfilepath=qbfilePath+"/"+qbname+"/"+Quesimage;
+							if(!Quesimage.equals(""))
+							{
+							 File file1=new File(new_newfilepath);
+		                                		 FileInputStream imageFile=new FileInputStream(file1);
+								 byte imageData[]=new byte[(int)file1.length()];
+							         imageFile.read(imageData);
+							         String imageDataString=Base64.getEncoder().encodeToString(imageData);
+							          imageFile.close();
+								 //ErrorDumpUtil.ErrorLog("The BASE 64 IMAGE IS : "+imageDataString);
+							          context.put("quesimage",imageDataString);
+							}
+	                                        }
+        	                        }
+                	        }
 			}//check for empty
 
 			/**

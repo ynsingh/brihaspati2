@@ -94,7 +94,10 @@ public class OnlineExamSystemMail{
 			}	
                         msgRegard = MailNotification.replaceServerPort(msgRegard);
                         int gid=GroupUtil.getGID(courseID);
-                        Vector stuuid=UserGroupRoleUtil.getUID(gid,3);
+			//send the mail to student 
+                        //Vector stuuid=UserGroupRoleUtil.getUID(gid,3);
+			//send the mail to student, TA, Instructor 
+                        Vector stuuid=UserGroupRoleUtil.getUID(gid);
                         for(int a=0;a<stuuid.size();a++)
                         {
                                 int stuid=Integer.parseInt((stuuid.get(a)).toString());

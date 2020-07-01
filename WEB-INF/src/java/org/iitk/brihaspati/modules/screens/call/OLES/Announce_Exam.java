@@ -212,6 +212,8 @@ public class Announce_Exam extends SecureScreen{
         	String eMonth = Integer.toString(eMon);
         	int eDat = cld.get(cld.DAY_OF_MONTH);
         	String eDate = Integer.toString(eDat);
+		int rDat = eDat +1;
+		String rdte=Integer.toString(rDat);
         	int eHou = cld.get(cld.HOUR_OF_DAY);
         	String eHour = Integer.toString(eHou);
         	int eMin = cld.get(cld.MINUTE);
@@ -224,9 +226,13 @@ public class Announce_Exam extends SecureScreen{
 				eHour="0"+eHour;
 			if(eMin<10)
 				eMinute="0"+eMinute;
+		if(rDat <10)
+			rdte="0"+rdte;
+
         	context.put("eYear",eYear);
         	context.put("eMonth",eMonth);
         	context.put("eDate",eDate);
+        	context.put("rDate",rdte);
         	context.put("eHour",eHour);
         	context.put("eMinute",eMinute);
 		/**

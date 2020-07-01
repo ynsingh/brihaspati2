@@ -55,7 +55,9 @@ $!data.getMessage()
                         #elseif($tdcolor == "3")
 			<td bgcolor="#AFDCEC">
 			#end
-			<b><I><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none>  #if($lang=="hindi")$brih_exam $brih_QDannounce #else $brih_QDannounce $brih_exam #end</I></b></a></td>
+			<b><I><a href=$link.setPage("call,OLES,AnnounceExam_Manage.vm").addPathInfo("count","3") style=text-decoration:none> 
+				#if($lang=="hindi")$brih_exam $brih_schedule #else $brih_schedule $brih_exam #end
+			</I></b></a></td>
 			#if($tdcolor != "4")
                         <td>
                         #elseif($tdcolor == "4")
