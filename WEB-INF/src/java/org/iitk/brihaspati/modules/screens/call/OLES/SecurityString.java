@@ -80,8 +80,9 @@ public class SecurityString extends  SecureScreen{
 			context.put("uid",uid);			
 			String courseid=(String)user.getTemp("course_id");
 			String count = pp.getString("count","6");			
-			context.put("tdcolor",count);
-			String counttemp = pp.getString("counttemp","");			
+			//context.put("tdcolor",count);
+			context.put("tdcolor","6");
+			String counttemp = pp.getString("counttemp","1");			
 			context.put("tdcolor1",counttemp);
 			String quizID=pp.getString("quizID","");
 			context.put("quizID",quizID);
@@ -92,7 +93,7 @@ public class SecurityString extends  SecureScreen{
 			String filemode=pp.getString("filemode","");
                         context.put("filemode",filemode);
 			
-			String flag=pp.getString("flag","");
+			String flag=pp.getString("flag","security");
 			context.put("flag",flag);
 			String flag1=pp.getString("flag1","");
 			context.put("flag1",flag1);

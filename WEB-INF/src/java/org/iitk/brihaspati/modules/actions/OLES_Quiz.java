@@ -2031,7 +2031,8 @@ public class OLES_Quiz extends SecureAction{
 				if(str.equals("Success"))
 					str=" "+MultilingualUtil.ConvertedString("mail_msg",LangFile);
                         	data.addMessage(str);
-				data.setScreenTemplate("call,OLES,AnnounceExam_Manage.vm");
+				//data.setScreenTemplate("call,OLES,AnnounceExam_Manage.vm");
+				data.setScreenTemplate("call,OLES,SecurityString.vm");
 
 			}
 		}catch(Exception e){

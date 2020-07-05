@@ -84,7 +84,8 @@ public class Oles_QB extends SecureScreen{
 			String crsId=(String)data.getUser().getTemp("course_id");
 			String username=data.getUser().getName();
 			ParameterParser pp=data.getParameters();
-			context.put("tdcolor",pp.getString("count","1"));
+			//context.put("tdcolor",pp.getString("count","1"));
+			context.put("tdcolor","1");
 			context.put("course",(String)user.getTemp("course_name"));
 			String mode =pp.getString("mode","");
 			context.put("mode",mode);
