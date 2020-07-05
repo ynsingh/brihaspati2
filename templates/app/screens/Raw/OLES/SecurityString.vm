@@ -82,7 +82,7 @@ $!data.getMessage()
                 #elseif($tdcolor == "6")
                 <td bgcolor="#AFDCEC">
                 #end
-                <b><a href=$link.setPage("call,OLES,SecurityString.vm").addPathInfo("count","6").addPathInfo("flag","security") style=text-decoration:none>$brith_security &nbsp;&nbsp;</b></a></td>
+                <b><a href=$link.setPage("call,OLES,SecurityString.vm").addPathInfo("count","6").addPathInfo("flag","security").addPathInfo("counttemp","1") style=text-decoration:none>$brith_security &nbsp;&nbsp;</b></a></td>
 
                 #if($tdcolor != "4")
                         <td>
@@ -157,6 +157,7 @@ $!data.getMessage()
                 <table width="100%" bgcolor="$ui.tableColor">
                         <tr bgcolor="$ui.tableColor">
                                 <td width="30%"><b>$brih_student $brih_name</b></td>
+                                <td width="30%"><b>$brih_student $brih_rollno</b></td>
                                 <td width="30%"><b>$brith_security $brih_num</b></td>
 				<td width="30%"><b>Action</b></td>
 			</tr>
@@ -170,11 +171,12 @@ $!data.getMessage()
                                 #end
 
                         <td>$secstrs.StudentID</td>
+                        <td>$secstrs.QuestionNumber</td>
                         <td>$secstrs.SecurityID</td>
 
 			<td><b><a href=$link.setPage("call,OLES,SecurityString.vm").setAction("OLES_AttemptQuiz").addPathInfo("quizlist",$quizlist).addPathInfo("quizname",$quizname).addPathInfo("studentid",$secstrs.getStudentID()).addPathInfo("counttemp","2").addPathInfo("count","6").addPathInfo("flag1","show").addPathInfo("flag","security").addPathInfo("actionName","eventSubmit_ResetSecuritynumber") onclick="javascript:return confirm('Do you want to change this security number')" style='text-decoration:none'>$brih_reset $brith_security $brih_num</b></a></td>
 
-			 #set($allDetail="${allDetail}${sno}-${secstrs.getStudentID()}-${secstrs.getSecurityID()}-<br>")
+			 #set($allDetail="${allDetail}${sno}-${secstrs.getStudentID()}-${secstrs.QuestionNumber}-${secstrs.getSecurityID()}-<br>")
                          #set($sno=$sno+1)
                             #end
 
@@ -243,12 +245,14 @@ function popupWin1(popupName) {
         var tmp = Win1.document;
         tmp.write('<html><head><title>Student List</title>');
         tmp.write('<body bgcolor="$ui.tableColor"></head>');
-        tmp.write('<table width="100%"><tr><td colspan="2"</td>');
+        tmp.write('<table width="100%">');
         tmp.write('<tr bgcolor="$ui.menuColor">');
-        tmp.write('<th colspan="4"><font size=3>Student Details</font></th>');
+        tmp.write('<th colspan="5"><font size=3>Student Details</font></th>');
+        tmp.write('</tr>');
         tmp.write('<tr bgcolor="$ui.menuColor">');
         tmp.write('<td><font color="blue">Sr. No.</font></td>');
         tmp.write('<td><font color="blue">Student Name</font></td>');
+        tmp.write('<td><font color="blue">Student Roll No</font></td>');
         tmp.write('<td><font color="blue">Security Number </font></td>');
         tmp.write('<td><font color="blue">Signature</font></td>');
         tmp.write('</tr>');
@@ -271,7 +275,7 @@ function popupWin1(popupName) {
                 tmp.write('</tr>');
                 value++;
         }
-        tmp.write('</td></tr></table>');
+        tmp.write('</table>');
         tmp.write('<p><a href="javascript:self.print()">Print</a> &nbsp;&nbsp;&nbsp;<a href="javascript:self.close()">Close</a> </p>');
         tmp.write('</body></html>');
 }

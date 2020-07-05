@@ -56,7 +56,7 @@ $!data.getMessage()
                 #elseif($tdcolor == "6")
                 <td bgcolor="#AFDCEC">
                 #end
-                <b><a href=$link.setPage("call,OLES,SecurityString.vm").addPathInfo("count","6").addPathInfo("flag","security") style=text-decoration:none>$brith_security &nbsp;&nbsp;</b></a></td>
+                <b><a href=$link.setPage("call,OLES,SecurityString.vm").addPathInfo("count","6").addPathInfo("flag","security").addPathInfo("counttemp","1") style=text-decoration:none>$brith_security &nbsp;&nbsp;</b></a></td>
 
                 #if($tdcolor != "4")
                         <td>

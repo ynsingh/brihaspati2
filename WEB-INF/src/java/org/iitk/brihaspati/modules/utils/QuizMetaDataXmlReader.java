@@ -52,6 +52,9 @@ import org.iitk.brihaspati.modules.utils.XmlReader;
 import org.iitk.brihaspati.modules.utils.QuizFileEntry;
 import org.iitk.brihaspati.modules.utils.FileEntry;
 import org.iitk.brihaspati.modules.utils.TopicMetaDataXmlReader;
+import org.iitk.brihaspati.om.StudentRollnoPeer;
+import org.iitk.brihaspati.om.StudentRollno;
+import org.iitk.brihaspati.modules.utils.CourseProgramUtil;
 //apache
 import org.apache.turbine.util.parser.ParameterParser;
 import org.apache.turbine.services.servlet.TurbineServlet;
@@ -1832,13 +1835,24 @@ public class QuizMetaDataXmlReader{
 			if(files!=null){
 				Attributes ats;
 				//String studentid,securityid,IP,startTime,endTime;
-				String studentid,securityid;
+				String studentid,securityid,rlrollno="";
 				int uid;
 				for(int i=0;i<files.length;i++){
 					QuizFileEntry fileEntry=new QuizFileEntry();
 					ats=files[i].getAttributes();
 					studentid=ats.getValue("StudentID");
 					securityid=ats.getValue("SecurityID");
+					List rno=CourseProgramUtil.getUserRollNo(studentid);
+					for(int j=0;j<rno.size();j++)
+        				{
+				                StudentRollno element = (StudentRollno)rno.get(j);
+						if(org.apache.commons.lang.StringUtils.isEmpty(rlrollno)){
+							rlrollno = element.getRollNo();
+						}else{
+							rlrollno = rlrollno +","+element.getRollNo();
+						}
+					}
+
 					//IP=ats.getValue("IPAddress");
 					//startTime=ats.getValue("Start_time");
 					//endTime=ats.getValue("End_time");
@@ -1846,6 +1860,7 @@ public class QuizMetaDataXmlReader{
 					//fileEntry.setEndTime(endTime);
 					fileEntry.setStudentID(studentid);
 					fileEntry.setSecurityID(securityid);
+					fileEntry.setQuestionNumber(rlrollno);
 					//fileEntry.setIP(IP);
 					collect.add(fileEntry);
 				}
