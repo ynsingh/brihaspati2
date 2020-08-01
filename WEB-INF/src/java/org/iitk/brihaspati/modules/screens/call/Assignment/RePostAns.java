@@ -41,6 +41,8 @@ import java.io.File;
 import java.util.List;
 import java.util.Date;
 import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import org.apache.velocity.context.Context;
 import org.apache.torque.util.Criteria;
@@ -90,16 +92,23 @@ public class RePostAns extends  SecureScreen
 				 ModuleTimeThread.getController().CourseTimeSystem(uid,eid);
                          }
 
-			Date curdate=new Date();
-                        long longCurDate = curdate.getTime();
-                       	int curdate1=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
                        	String Assign=TurbineServlet.getRealPath("/Courses"+"/"+courseid+"/Assignment");
                         Vector w=new Vector();
-			String cdate=ExpiryUtil.getCurrentDate("");
+
+			DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date curDate1=new Date();
+                        String curdate=dateFormat.format(curDate1);
+			long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+			context.put("date",curdate);
+
+		//	Date curdate=new Date();
+                  //      long longCurDate = curdate.getTime();
+                    //   	int curdate1=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
+		//	String cdate=ExpiryUtil.getCurrentDate("");
 			
-			String date1=cdate.substring(0,4);
-                        date1=date1+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
-                        context.put("date",date1);
+		//	String date1=cdate.substring(0,4);
+                  //      date1=date1+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+                    //    context.put("date",date1);
 			
 			Criteria crit=new Criteria();
                         crit.add(AssignmentPeer.GROUP_NAME,courseid);
@@ -107,9 +116,12 @@ public class RePostAns extends  SecureScreen
 			
 			for(int i=0;i<u.size();i++)
                         {       Assignment element=(Assignment)(u.get(i));
-                                Date date=(element.getDueDate());
-                                long date2=date.getTime();
-				long redate=(longCurDate-date2)/(24*3600*1000);
+                                Date date1=(element.getDueDate());
+				String duedate=dateFormat.format(date1);
+				long longduedate=Long.parseLong(((duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				long redate =longduedate-longcurdate;
+                        //        long date2=date.getTime();
+			//	long redate=(longCurDate-date2)/(24*3600*1000);
                                 if(redate>=0)
                                 {
 					String str1=(element.getAssignId());
@@ -125,12 +137,14 @@ public class RePostAns extends  SecureScreen
 						{	for(int grade=0;grade<Assignmentlist1.size();grade++)
                                         		{
 						 		String date3="";  
-								String Duedate =((FileEntry) Assignmentlist1.elementAt(grade)).getDuedate();
+								String Duedate1 =((FileEntry) Assignmentlist1.elementAt(grade)).getDuedate();
 		                                       		String  fileName =((FileEntry) Assignmentlist1.elementAt(grade)).getfileName();
-								Duedate=Duedate.replaceAll("-","");
-								int date4=Integer.parseInt(Duedate);
+								long longduedate1=Long.parseLong(((Duedate1.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+							//	Duedate=Duedate.replaceAll("-","");
+							//	int date4=Integer.parseInt(Duedate);
 									
-								if(date4>=curdate1)
+							//	if(date4>=curdate1)
+								if(longduedate1 >= longcurdate)
 			                                        {
 									String str3=(element.getTopicName());
 									if(fileName.equals("All"))

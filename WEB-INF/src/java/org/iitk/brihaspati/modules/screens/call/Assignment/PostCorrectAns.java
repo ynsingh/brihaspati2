@@ -104,8 +104,12 @@ public class PostCorrectAns extends  SecureScreen
 			context.put("topicName",data.getParameters().getString("topicname",""));
 			context.put("fileName",data.getParameters().getString("filename",""));
                         context.put("tdcolor",pp.getString("count",""));
-			 Date curDate=new Date();
-                        long longCurDate= curDate.getTime();
+//			 Date curDate=new Date();
+  //                      long longCurDate= curDate.getTime();
+			DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date curDate1=new Date();
+                        String curdate=dateFormat.format(curDate1);
+      //                 long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
                         /**
                           *Time calculaion for how long user use this page.
                           */
@@ -116,11 +120,11 @@ public class PostCorrectAns extends  SecureScreen
                                 ModuleTimeThread.getController().CourseTimeSystem(uid,eid);
                          }
 
-			String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date3=cdate.substring(0,4);
-                        date3=date3+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
-                        context.put("date",date3);
-
+//			String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+  //                      String date3=cdate.substring(0,4);
+    //                    date3=date3+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+      //                  context.put("date",date3);
+			context.put("date",curdate);
         		
 		} //try
                 catch(Exception e){ ErrorDumpUtil.ErrorLog("The Error in PostCorrectAns screen for instructor "+e); }

@@ -37,6 +37,8 @@ package org.iitk.brihaspati.modules.screens.call.Assignment;
 import java.util.Date;
 import java.util.List;
 import java.util.Vector;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import org.apache.torque.util.Criteria;
 import org.apache.turbine.util.RunData;
@@ -80,8 +82,12 @@ public class PostGrade  extends  SecureScreen
                         Vector v=new Vector();
                         Vector name=new Vector();
                         Vector w=new Vector();
-                        Date curDate=new Date();
-                        long longCurDate= curDate.getTime();
+                       // Date curDate=new Date();
+                       // long longCurDate= curDate.getTime();
+		       DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date curDate1=new Date();
+                        String curdate=dateFormat.format(curDate1);
+                       long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
                         Criteria crit=new Criteria();
                         crit.add(AssignmentPeer.GROUP_NAME,courseid);
                         List u=AssignmentPeer.doSelect(crit);
@@ -89,8 +95,11 @@ public class PostGrade  extends  SecureScreen
                         {
                                 Assignment element=(Assignment)(u.get(i));
                                 Date date1=(element.getDueDate());
-                                long longCurDate1= date1.getTime();
-                                long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
+				String duedate=dateFormat.format(curDate1);
+                           //     long longCurDate1= date1.getTime();
+                           //     long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
+			   	long longduedate=Long.parseLong(((duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));     
+				long coursedate =longduedate-longcurdate;
 				if(coursedate<0)
                                 {
 

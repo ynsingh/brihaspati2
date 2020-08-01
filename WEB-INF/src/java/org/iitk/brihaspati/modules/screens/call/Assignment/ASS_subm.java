@@ -63,6 +63,8 @@ import org.iitk.brihaspati.modules.utils.GroupUtil;
 //import org.iitk.brihaspati.modules.utils.CourseTimeUtil;
 //import org.iitk.brihaspati.modules.utils.ModuleTimeUtil;
 import org.iitk.brihaspati.modules.utils.ModuleTimeThread;
+import java.text.SimpleDateFormat;
+
 /**
  *   This class contains code for all discussions in workgroup
  *   Compose a discussion and reply.
@@ -102,9 +104,14 @@ public class  ASS_subm  extends  SecureScreen
                         */
 			
 			context.put("coursename",((String)user.getTemp("course_name")));
-                        Date curDate=new Date();
-                        long longCurDate= curDate.getTime();
-                        String Role = (String)user.getTemp("role");
+			
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date curDate1=new Date();
+    			String curdate=formatter.format(curDate1);
+			long curdate1=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+                        long longCurDate= curDate1.getTime();
+                        
+			String Role = (String)user.getTemp("role");
                         context.put("user_role",Role);
                         context.put("tdcolor",pp.getString("count",""));
 			//topic
@@ -180,7 +187,7 @@ public class  ASS_subm  extends  SecureScreen
                                         *show the particular student Repost Permissions
                                         *Show read the pemissions .xml file
                                         */
-                                        int curdate1=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
+                                  //      int curdate1=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
 					File f2= new File(Assign+"/__permission.xml");
 					if(f2.exists())
 					{
@@ -194,9 +201,11 @@ public class  ASS_subm  extends  SecureScreen
 								{
                                                                         String Duedate =((FileEntry) Assignmentlist1.elementAt(grade)).getDuedate();
                                                                         String  fileName =((FileEntry) Assignmentlist1.elementAt(grade)).getfileName();
-									Duedate=Duedate.replaceAll("-","");
-		                                                        int date4=Integer.parseInt(Duedate);
-                                                                        if(date4>=curdate1)
+									long duedate1=Long.parseLong(((Duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+								//	Duedate=Duedate.replaceAll("-","");
+		                                                //        int date4=Integer.parseInt(Duedate);
+                                                                  //      if(date4>=curdate1)
+								        if(duedate1 >= curdate1)
                                                                         {
                                                                                 if(fileName.equals(data.getUser().getName()))
                                                                                                perdate=true;
@@ -255,8 +264,8 @@ public class  ASS_subm  extends  SecureScreen
                                         	Assignment element=(Assignment)(uu.get(i));
 	                                        topic=(element.getTopicName());
 	                                        cdate=(element.getDueDate()).toString();
-						cdate=cdate.substring(0,10);
-               	        			cdate=cdate.replace("-","");
+				//		cdate=cdate.substring(0,10);
+               	        	//		cdate=cdate.replace("-","");
 	                                        int mmarks=(element.getGrade());
 	                                        String assid=(element.getAssignId());
 						context.put("topic",topic);
@@ -289,16 +298,20 @@ public class  ASS_subm  extends  SecureScreen
                                 }
 				context.put("message", str);
 			}else{
-				cdate=ExpiryUtil.getCurrentDate("");
+				//cdate=ExpiryUtil.getCurrentDate("");
+				cdate=curdate;
                       	}//mode update close
 
                         /**
                          * Get the current day from the currentdate
                          */
 
-                        context.put("cdays",cdate.substring(6,8));
-                        context.put("cmonth",cdate.substring(4,6));
+                        context.put("cdays",cdate.substring(8,10));
+                        context.put("cmonth",cdate.substring(5,7));
                         context.put("cyear",cdate.substring(0,4));
+                        context.put("chours",cdate.substring(11,13));
+                        context.put("cmins",cdate.substring(14,16));
+
                         context.put("year_list",YearListUtil.getYearList());
 			}//role instructor close
                 }
