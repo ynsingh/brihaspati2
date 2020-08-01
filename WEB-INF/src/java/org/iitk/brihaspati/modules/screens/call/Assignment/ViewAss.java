@@ -129,7 +129,7 @@ public class ViewAss extends  SecureScreen
                         for(int i=0;i<u.size();i++)
                         {
                                 Assignment element=(Assignment)(u.get(i));
-                                Date date1=(element.getDueDate());
+                            //    Date date1=(element.getDueDate());
                                 String Assid=(element.getAssignId());
                                 if(Assid.startsWith(courseid))
                                 {
@@ -335,21 +335,29 @@ public class ViewAss extends  SecureScreen
 				String stFName=UserUtil.getFullName(UserUtil.getUID(studentname));
 				// Get the roll no of this student		
 				String  stRlNo=CourseProgramUtil.getUserRollNo(studentname,courseid);
-
-				Date date1 = new Date();
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-				String dateFormatted = dateFormat.format(date1);
-				Date todayDate = dateFormat.parse(dateFormatted);
-				Date newDueDate = dateFormat.parse(filedate);
+				
+				DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        	Date curDate1=new Date();
+                        	String curdate=dateFormat.format(curDate1);
+                       		long todayDate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				long newDueDate=Long.parseLong(((filedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				long ddiff=newDueDate - todayDate;
+//				Date date1 = new Date();
+//				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//				String dateFormatted = dateFormat.format(date1);
+//				Date todayDate = dateFormat.parse(dateFormatted);
+//				Date newDueDate = dateFormat.parse(filedate);
 				
 				//ErrorDumpUtil.ErrorLog("filedate=="+filedate);
 				//ErrorDumpUtil.ErrorLog("(todayDate.compareTo(newDueDate==="+todayDate.compareTo(newDueDate));
- 				if ((todayDate.compareTo(newDueDate)<0)||(todayDate.compareTo(newDueDate)==0))
+ 			//	if ((todayDate.compareTo(newDueDate)<0)||(todayDate.compareTo(newDueDate)==0))
+ 				if (ddiff >= 0)
 					postAnsChk = "Yes";
 				
 				AssignmentDetail assignmentdetail=new AssignmentDetail();
 
-				if((todayDate.compareTo(newDueDate)>0)){
+			//	if((todayDate.compareTo(newDueDate)>0)){
+				if((ddiff < 0)){
 					assignmentdetail.setBoolean(true);
 				}
 				assignmentdetail.setStudentname(studentname);

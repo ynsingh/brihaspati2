@@ -39,6 +39,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.Vector;
 import java.io.File;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
@@ -84,8 +86,13 @@ public class PostAns extends  SecureScreen
 			context.put("Ans","Ans");
 			context.put("tdcolor",data.getParameters().getString("count",""));
 			context.put("topicnm",data.getParameters().getString("topicname",""));
-			Date curDate=new Date();
-                        long longCurDate= curDate.getTime();
+
+			DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        Date curDate1=new Date();
+                        String curdate=dateFormat.format(curDate1);
+			long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+		//	Date curDate=new Date();
+                  //      long longCurDate= curDate.getTime();
 			/*
                          *Time calculaion for how long user use this page.
                          */
@@ -105,8 +112,11 @@ public class PostAns extends  SecureScreen
                         {
 			 	Assignment element=(Assignment)(u.get(i));
                                 Date date1=(element.getDueDate());
-                                long longCurDate1= date1.getTime();
-                                long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
+				String duedate=dateFormat.format(date1);
+				long longduedate=Long.parseLong(((duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				long coursedate =longduedate-longcurdate;
+                               // long longCurDate1= date1.getTime();
+                               // long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
                         	/**
 				*To view all the Topic name in particular Courses
 				*
@@ -161,10 +171,11 @@ public class PostAns extends  SecureScreen
 					context.put("answerfilecheck","checked");
 			} 
 			
-			String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date3=cdate.substring(0,4);
-			date3=date3+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
- 			context.put("date",date3);
+//			String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+  //                      String date3=cdate.substring(0,4);
+//			date3=date3+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+ //			context.put("date",date3);
+ 			context.put("date",curdate);
  			
 						
                        

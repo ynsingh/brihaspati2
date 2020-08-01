@@ -49,7 +49,6 @@ import org.iitk.brihaspati.modules.utils.ExpiryUtil;
 import org.iitk.brihaspati.modules.screens.call.SecureScreen;
 import org.apache.turbine.util.parser.ParameterParser;
 import org.iitk.brihaspati.modules.utils.ErrorDumpUtil;
-import org.iitk.brihaspati.modules.utils.ErrorDumpUtil;
 import org.apache.turbine.om.security.User;             
 import java.util.List;
 import com.workingdogs.village.Record;
@@ -70,6 +69,8 @@ import org.iitk.brihaspati.modules.utils.FileEntry;
 import org.iitk.brihaspati.modules.utils.UserGroupRoleUtil;    
 import org.iitk.brihaspati.modules.utils.GroupUtil;         
 import org.iitk.brihaspati.modules.utils.YearListUtil;
+import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 
 import org.iitk.brihaspati.modules.utils.UserUtil;
 import org.iitk.brihaspati.modules.utils.ModuleTimeThread;
@@ -117,8 +118,11 @@ public class RePermission  extends  SecureScreen
                         //Vector name=new Vector();
                         Vector w=new Vector();
 
-                        Date curDate=new Date();
-                        long longCurDate= curDate.getTime();
+                        //Date curDate=new Date();
+                        //long longCurDate= curDate.getTime();
+			DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date curDate1=new Date();
+			String curdate=dateFormat.format(curDate1);
 
                         Criteria crit=new Criteria();
                         crit.add(AssignmentPeer.GROUP_NAME,courseid);
@@ -127,8 +131,16 @@ public class RePermission  extends  SecureScreen
 			for(int i=0;i<u.size();i++)
                         {       Assignment element=(Assignment)(u.get(i));
                                 Date date1=(element.getDueDate());
-                                long longCurDate1= date1.getTime();
-                                long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
+				String duedate=dateFormat.format(date1);
+                                //long longCurDate1= date1.getTime();
+                                //long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
+                                long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+//				ErrorDumpUtil.ErrorLog("the cur date value is "+longcurdate);
+				long longduedate=Long.parseLong(((duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+//				ErrorDumpUtil.ErrorLog("the due date value is "+longduedate);
+	//			int coursedate=(int)(((date1.getTime()) - (Cur_date.getTime()))/(24*3600*1000));
+				long coursedate =longduedate-longcurdate;
+//				ErrorDumpUtil.ErrorLog("the value is "+coursedate);
                                 if(coursedate<0)
                                 {
                                         String str2=(element.getTopicName());
@@ -138,15 +150,21 @@ public class RePermission  extends  SecureScreen
                         context.put("allTopics",w);
 			
 			
-			String cdate=ExpiryUtil.getCurrentDate("");
+//			String cdate=ExpiryUtil.getCurrentDate("");
                         			
 			/**
                         * Get the current day from the currentdate
                         */
-                        
-			context.put("cdays",cdate.substring(6,8));
-                        context.put("cmonth",cdate.substring(4,6));
-                        context.put("cyear",cdate.substring(0,4));
+  			context.put("cdays",curdate.substring(8,10));
+                        context.put("cmonth",curdate.substring(5,7));
+                        context.put("cyear",curdate.substring(0,4));
+                        context.put("chours",curdate.substring(11,13));
+                        context.put("cmins",curdate.substring(14,16));                      
+
+		//	context.put("cdays",cdate.substring(6,8));
+                  //      context.put("cmonth",cdate.substring(4,6));
+                    //    context.put("cyear",cdate.substring(0,4));
+
                         context.put("year_list",YearListUtil.getYearList());
 
 

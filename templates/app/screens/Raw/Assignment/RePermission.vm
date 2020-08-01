@@ -80,6 +80,8 @@ $!data.getMessage()
 
         #set($month=["01","02","03","04","05","06","07","08","09","10","11","12"])
 	#set($day=["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24","25","26","27","28","29","30","31"])
+	#set($hours=["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"])
+        #set($mins=["05","10","15","20","25","30","35","40","45","50","55","00"])
 <form name=uploadform method="post" enctype="multipart/form-data"  action=$link.setPage("call,Assignment,RePermission.vm").setAction("Assignments")>
 ##<table Cell padding="20" Cell spacing="1" align="center" bgcolor="$ui.tableColor" border="1" width="75%" >
 <tr bgcolor="$ui.menuColor">
@@ -129,6 +131,25 @@ $!data.getMessage()
                     		#end
                   	#end
 		</select>	        
+		&nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="h" name="Start_hour"  >
+                <option value="$chours">$chours
+                #foreach($hrs in $hours)
+                        #if($hrs!=$chours)
+                        <option value="$hrs">$hrs
+                        #end
+                #end
+                </select>
+                &nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="m" name="Start_min"  >
+                <option value="$cmins">$cmins
+                #foreach($min in $mins)
+                        #if($min!=$cmins)
+                        <option value="$min">$min
+                        #end
+                #end
+                </select>
+
 		</td> 
                </tr>
 	<tr bgcolor="$ui.menuColor">

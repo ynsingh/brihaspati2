@@ -98,7 +98,6 @@ public class Assignments extends SecureAction
 			String LangFile=data.getUser().getTemp("LangFile").toString();
 			String msg="";			
                         ParameterParser pp=data.getParameters();
-			
 
                         /**
                         * Get courseid  and coursename for the user currently logged in
@@ -110,10 +109,9 @@ public class Assignments extends SecureAction
                         String courseid=(String)user.getTemp("course_id","");
 			int userid=UserUtil.getUID(username);
 			// get the full of student 
-                                String Fullname=UserUtil.getFullName(userid);
+                        String Fullname=UserUtil.getFullName(userid);
                         // Get the roll no of this student              
-                                String Rollnm=CourseProgramUtil.getUserRollNo(username,courseid);
-				
+                        String Rollnm=CourseProgramUtil.getUserRollNo(username,courseid);
 				
                         /**
                         *Retrieve the parameters by using the ParameterParser
@@ -125,6 +123,8 @@ public class Assignments extends SecureAction
                         String year=pp.getString("Start_year");
                         String month=pp.getString("Start_mon");
                         String day=pp.getString("Start_day");
+                        String hours=pp.getString("Start_hour");
+                        String mins=pp.getString("Start_min");
                         String pubst=pp.getString("publish");
 //			ErrorDumpUtil.ErrorLog("list of assignment-------------"+pubst);
 			if(pubst.equalsIgnoreCase("0"))            // modified by ankita dwivedi
@@ -146,41 +146,34 @@ public class Assignments extends SecureAction
 
                         /**
                         *convert the year,month,date in date formate
-                        */
+                        */				
 				
-				
-                        String Duedate=year+"-"+month+"-"+day;
-			
+                        String Duedate=year+"-"+month+"-"+day+" "+hours+":"+mins+":00";
+			ErrorDumpUtil.ErrorLog("The due date is "+Duedate);
 			/**
 			* create current Date 
 			*/
-			
-			String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String cur_date=cdate.substring(0,4);
-                        cur_date=cur_date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+			//get current date time with Date()
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date date = new java.util.Date();
+                        String curdate=dateFormat.format(date);
+		//	ErrorDumpUtil.ErrorLog("The current date is "+curdate);
 
                         int GID=GroupUtil.getGID(courseid);
-                        Date Cur_date=Date.valueOf(cur_date);
-                        Date Post_date=Date.valueOf(Duedate);
-                        long longCurDate= Cur_date.getTime();
-                        long longDueDate= Post_date.getTime();
-                        long Edate=(longDueDate-longCurDate)/(24*3600*1000)+1;
+                        Date Cur_date=new Date((dateFormat.parse(curdate)).getTime());
+                        Date Post_date=new Date((dateFormat.parse(Duedate)).getTime());
+//			ErrorDumpUtil.ErrorLog("I am reached here"+Post_date +" and c date "+Cur_date);
+                        long longCurDate= Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+                        long longDueDate= Long.parseLong(((Duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+//			ErrorDumpUtil.ErrorLog("I am reached here long"+ longDueDate+" and c date "+longCurDate);
+
+                        int Edate=(int)((((Post_date.getTime()) - (Cur_date.getTime()))/(24*3600*1000))+1);
                         String News= "New Assignment "+Duedate;
-							
-									
+//			ErrorDumpUtil.ErrorLog(" The edate is "+Edate +" and news is "+News);
+																
                         String MessageBox="Course Number "+ courseid +" Topic Name "+DB_subject1+" Grade "+Grade+" Instructions is "+DB_message1;
+//			ErrorDumpUtil.ErrorLog("Value of message box-------------"+MessageBox);
 
-                        /**
-                        * Get the user name  and find the user id
-                        * @see UserUtil in utils
-                        */
-				
-
-                        /*String uname=user.getName();
-                        int u_id=UserUtil.getUID(uname);
-                        String uid=Integer.toString(u_id);
-*/
-			
                         /**
                         * convert date String to Integer
                         */
@@ -188,22 +181,19 @@ public class Assignments extends SecureAction
                         int Year1=Integer.parseInt(year);
                         int Month1=Integer.parseInt(month);
 			int Day=Integer.parseInt(day);
-                        String pdate= year+month+day;
-                        int pubdate=Integer.parseInt(pdate);
 			boolean flag=false;
-			//Vector str=new Vector();
 
                         /** Expiry date get using ExpiryUtil and convert String type to Date type*/
 
-                        int curdate=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
                         int toprict=StringUtil.checkString(DB_subject1);
 
+//			ErrorDumpUtil.ErrorLog("Check the string value-------------> "+toprict);
                         if(toprict > -1)
         		{
 				msg= MultilingualUtil.ConvertedString("assignment_msg4",LangFile);
 	                 	data.setMessage(msg);
                         }
-                        else if(pubdate >= curdate)
+                        else if(longDueDate >= longCurDate)
                         {
                                 if((Month1==4||Month1==6||Month1==9||Month1==11) && (Day>30))
                                         return;
@@ -321,7 +311,7 @@ public class Assignments extends SecureAction
                 		                * from the Assignment table
                                 	        */
 
-						//ErrorDumpUtil.ErrorLog("I am here 279 agroup_name====>"+agroup_name);
+			//			ErrorDumpUtil.ErrorLog("I am here 279 after new entry agroup_name====>"+agroup_name);
 						crit1=new Criteria();
 						if(mode.equals("Update")) 
 	                                                crit1.add(AssignmentPeer.ID,Id);
@@ -379,7 +369,7 @@ public class Assignments extends SecureAction
 							}	
 						}
                                                	if(!mode.equals("Update")){
-						ErrorDumpUtil.ErrorLog("I am here 314 ====>"+MessageBox);
+			//			ErrorDumpUtil.ErrorLog("I am here 314 ====>"+MessageBox);
                                         		TopicMetaDataXmlWriter.appendUpdationMailElement(xmlwriter,fileName,username,Grade,Duedate,Fullname,Rollnm);     
 							xmlwriter.writeXmlFile();
 						}
@@ -422,13 +412,13 @@ public class Assignments extends SecureAction
                                         * Select the Topic Name According to Course Id
                                         * from the Assignment table
                                         */
-					ErrorDumpUtil.ErrorLog("In START of else====>"+MessageBox);
+				//	ErrorDumpUtil.ErrorLog("In START of else====>"+MessageBox);
 				
                                         crit=new Criteria();
 					crit.add(AssignmentPeer.GROUP_NAME,courseid);
                                         crit.add(AssignmentPeer.TOPIC_NAME,DB_subject1);
                                         List u5=AssignmentPeer.doSelect(crit);
-					ErrorDumpUtil.ErrorLog("In else====u5.size()>"+u5.size());
+				//	ErrorDumpUtil.ErrorLog("In else====u5.size()>"+u5.size());
 
                                         if( (u5.size()==0) || (mode.equals("Update")) )
                                         {//if2
@@ -470,7 +460,7 @@ public class Assignments extends SecureAction
 						if (mode.equals("Update")) {
 //							ErrorDumpUtil.ErrorLog("In Assignment Update====>");
 							AssignmentPeer.doUpdate(crit1);
-							ErrorDumpUtil.ErrorLog("In after Update ====>");
+			//				ErrorDumpUtil.ErrorLog("In after Update ====>");
 						} else {
 //							ErrorDumpUtil.ErrorLog("In Assignment Insert1====>"+crit1);
                                                 	AssignmentPeer.doInsert(crit1);
@@ -521,7 +511,7 @@ public class Assignments extends SecureAction
 						}
 
 //						ErrorDumpUtil.ErrorLog("I am here 314 ====>"+MessageBox);
-						ErrorDumpUtil.ErrorLog("I am here 574 ====>"+MessageBox);
+			//			ErrorDumpUtil.ErrorLog("I am here 574 ====>"+MessageBox);
 						/**
                                                 * Disply Message when assignment uploaded successfully
                                                 * and Assignment update successfully
@@ -535,7 +525,7 @@ public class Assignments extends SecureAction
 							data.setMessage(msg);
 						}
 						flag=true;
-						//ErrorDumpUtil.ErrorLog("End ELSE========");
+			//			ErrorDumpUtil.ErrorLog("End ELSE========");
 						
                                         }//if2
                                         else {  
@@ -630,15 +620,18 @@ public class Assignments extends SecureAction
                         String user_role=(String)data.getUser().getTemp("role");
                         String courseid=(String)user.getTemp("course_id","");
                         // Get the roll no of this student              
-                                String Rollnm=CourseProgramUtil.getUserRollNo(username,courseid);
+                        String Rollnm=CourseProgramUtil.getUserRollNo(username,courseid);
                         
 			/**
                         * create current Date
                         */
+                        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date cdate = new java.util.Date();
+                        String date=dateFormat.format(cdate);
 
-                        String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date=cdate.substring(0,4);
-                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+                        //String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+                       // String date=cdate.substring(0,4);
+                       // date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
 
 			//String date=pp.getString("date","");
                         String DB_subject1=pp.getString("topicList");
@@ -791,9 +784,12 @@ public class Assignments extends SecureAction
                         * create current Date
                         */
 
-                        String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date=cdate.substring(0,4);
-                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+                        //String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+                        //String date=cdate.substring(0,4);
+                       // date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date cdate = new java.util.Date();
+                        String date=dateFormat.format(cdate);
 
                         //String date=pp.getString("date","");
                         String DB_subject1=pp.getString("topicList");
@@ -915,6 +911,7 @@ public class Assignments extends SecureAction
                         String GetUser=pp.getString("GetUser","");
                         context.put("GetUser",GetUser);
                         String username=user.getName();
+
                         String courseid=(String)user.getTemp("course_id","");
                         String DB_subject=pp.getString("contentTopic","");
                         if(DB_subject.length()!=0)
@@ -931,13 +928,12 @@ public class Assignments extends SecureAction
 				}
                                 else {
 					msg= MultilingualUtil.ConvertedString("assignment_msg18",LangFile);
-                                     //   data.setMessage(msg); ====> Add one line by sk
 					context.put("DB_subject",DB_subject);
                                         data.setMessage("\" "+DB_subject+"  \""+msg);
 				}
                         }
-			if((DB_subject1.equals(""))|| (DB_subject1.equals(null)))
-				data.setMessage(MultilingualUtil.ConvertedString("uploadAction_msg",LangFile));
+	//		if((DB_subject1.equals(""))|| (DB_subject1.equals(null)))
+	//			data.setMessage(MultilingualUtil.ConvertedString("uploadAction_msg",LangFile));
                 }
                 catch(Exception ex) { data.setMessage("The error in dosubmitView under  Assignment action  !!"+ex);   }
 	}
@@ -976,29 +972,40 @@ public class Assignments extends SecureAction
                         * create current Date
                         */
 
-                        String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date=cdate.substring(0,4);
-                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+                        //String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+                       // String date=cdate.substring(0,4);
+                        //date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date cdate = new java.util.Date();
+                        String curdate=dateFormat.format(cdate);
 
                         //String date=pp.getString("date","");
                         String DB_subject=pp.getString("topicList");
                         String DB_subject1=pp.getString("topicList1");
 			//ErrorDumpUtil.ErrorLog("DB_subject1==="+DB_subject1);
                         String grade=pp.getString("");
+
                         String year=pp.getString("Start_year");
                         String month=pp.getString("Start_mon");
                         String day=pp.getString("Start_day");
-                        String Duedate=year+"-"+month+"-"+day;
+			String hours=pp.getString("Start_hour");
+                        String mins=pp.getString("Start_min");
+
+                        String Duedate=year+"-"+month+"-"+day+" "+hours+":"+mins+":00";
                         /** convert Date String to Integer  */
                         int Year1=Integer.parseInt(year);
 			int Month1=Integer.parseInt(month);
                         int Day=Integer.parseInt(day);
-                        String pdate= year+month+day;
-                        int pubdate=Integer.parseInt(pdate);
+    //                    String pdate= year+month+day;
+  //                      int pubdate=Integer.parseInt(pdate);
                         /** Expiry date get using ExpiryUtil and convert String type to Date type*/
-                        int curdate=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
+//                        int curdate=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
 
-                        if(pubdate >= curdate)
+			long longCurDate= Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+			long longDueDate= Long.parseLong(((Duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+
+                        //if(pubdate >= curdate)
+                        if(longDueDate >= longCurDate)
                         {
                                 if((Month1==4||Month1==6||Month1==9||Month1==11) && (Day>30))
                                 {
@@ -1016,7 +1023,8 @@ public class Assignments extends SecureAction
                                 String Assign=TurbineServlet.getRealPath("/Courses"+"/"+courseid+"/Assignment");
                                 if(DB_subject1.equals("All"))
                                 {
-                                        Date Post_date=Date.valueOf(Duedate);
+					Date Post_date=new Date((dateFormat.parse(Duedate)).getTime());
+//                                        Date Post_date=Date.valueOf(Duedate);
                                         Criteria crit=new Criteria();
                                         crit.add(AssignmentPeer.GROUP_NAME,courseid);
                                         crit.add(AssignmentPeer.TOPIC_NAME,DB_subject);
@@ -1136,10 +1144,14 @@ public class Assignments extends SecureAction
                         * create current Date
                         */
 
-                        String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date=cdate.substring(0,4);
-                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
-	
+    //                    String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+  //                      String date=cdate.substring(0,4);
+//                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date cdate = new java.util.Date();
+                        String curdate=dateFormat.format(cdate);
+			long longcurdate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+
                         //String date=pp.getString("date","");
                         String DB_subject=pp.getString("topicList");
                         String DB_subject1=pp.getString("topicList1");
@@ -1147,19 +1159,22 @@ public class Assignments extends SecureAction
                         String year=pp.getString("Start_year");
                         String month=pp.getString("Start_mon");
                         String day=pp.getString("Start_day");
-                        String Duedate="0000"+"-"+"00"+"-"+"00";
+			String hours=pp.getString("Start_hour");
+                        String mins=pp.getString("Start_min");
+                        String Duedate="1970"+"-"+"00"+"-"+"00"+" "+"00:00:00";
                         /** convert Date String to Integer  */
 			int Year1=Integer.parseInt(year);
-                        ErrorDumpUtil.ErrorLog("yyyy..."+Duedate);
+//                        ErrorDumpUtil.ErrorLog("yyyy..."+Duedate);
                         int Month1=Integer.parseInt(month);
                         int Day=Integer.parseInt(day);
 
-                        String pdate= year+month+day;
+//                        String pdate= year+month+day;
+			long longpubdate=Long.parseLong(year+month+day+hours+mins+"00");
 
-                        int pubdate=Integer.parseInt(pdate);
+    //                    int pubdate=Integer.parseInt(pdate);
                         /** Expiry date get using ExpiryUtil and convert String type to Date type*/
-                        int curdate=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
-                        if(pubdate <= curdate)
+  //                      int curdate=Integer.parseInt(ExpiryUtil.getCurrentDate(""));
+                        if(longpubdate <= longcurdate)
                         {
                                 String str2="";
                                 context.put("topicList",DB_subject1);
@@ -1221,7 +1236,8 @@ public class Assignments extends SecureAction
                                 }
                                 if(DB_subject1.equals("All"))
                                 {
-                                        Date Post_date=Date.valueOf(Duedate);
+					Date Post_date=new Date((dateFormat.parse(Duedate)).getTime());
+//                                        Date Post_date=Date.valueOf(Duedate);
                                         Criteria crit1=new Criteria();
                                         crit1.add(AssignmentPeer.GROUP_NAME,courseid);
 					crit1.add(AssignmentPeer.TOPIC_NAME,DB_subject);
@@ -1289,9 +1305,12 @@ public class Assignments extends SecureAction
                         * create current Date
                         */
 
-                        String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
-                        String date=cdate.substring(0,4);
-                        date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+                        //String cdate = Integer.toString(Integer.parseInt(ExpiryUtil.getCurrentDate("")));
+                        //String date=cdate.substring(0,4);
+                        //date=date+"-"+cdate.substring(4,6)+"-"+cdate.substring(6,8);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        java.util.Date cdate = new java.util.Date();
+                        String date=dateFormat.format(cdate);
 
 			String DB_subject1=pp.getString("topicList");
 			context.put("topicList",DB_subject1);
