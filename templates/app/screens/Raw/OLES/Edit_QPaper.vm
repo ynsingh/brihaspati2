@@ -1,0 +1,177 @@
+#*
+ * @#Edit_QPaper.vm
+ * Copyright (c) 2020 ETRG,IIT Kanpur.
+ * All Rights Reserved.
+ * @author <a href="mailto:palseema30@gmail.com ">Manorama Pal</a>
+*#
+
+$page.setTitle("Edit Question ")
+$page.setBgColor("bgcolor")
+<head>
+<link rel="stylesheet" type="text/css" href="$content.getURI("/scrpts/htmlarea.css")" media="screen"/>
+</head>
+
+## If some message has been set, that is retrieved and displayed.
+$!data.getMessage()
+## Retreiving the $lang (representing the choosen language for display, which was set in corresponding the screen class.
+
+#set($lang = $data.getUser().getTemp("lang").toString())
+<table bgcolor="$ui.menuColor" width=100%>
+        <tr><td><b>
+                <a href=$link.setPage("Index.vm") style='text-decoration:none'>$brih_home</a>|
+                <a href=$link.setPage("call,CourseMgmt_User,CourseHome.vm") style='text-decoration:none'>$course</a> |
+               	<a href=$link.setPage("call,OLES,View_QPaper.vm").addPathInfo("count","1").addPathInfo("qpfile",$exmqp) style='text-decoration:none'> View Question Paper</a> |
+                 Edit Question
+        </b></td>
+## Creating the links for help regarding Quiz 
+<td align=right><img src="$content.getURI("/images/hand.gif")"><a href=javascript:popupWin("/brihaspati/docs/OLES_Quiz.html","newWin") style='text-decoration:none'>$brih_help</a></td>
+</tr>
+</table>
+#set($cnm = $data.getUser().getTemp("course_name" ).toString())
+<form name="frm" method="post"  enctype="multipart/form-data" action=$link.setPage("call,OLES,Edit_QPaper.vm").setAction("OLES_QuesPaper")>
+#foreach($finalqp in $qpaper)
+        <table align=center bgcolor="$ui.tableColor" border=0 cellpadding="5" width=100% >
+                <tr>
+                        <td align=center colspan=2 >
+                                <font size=4><b>Question Paper Name : $exmqp </b></font>
+                        </td>
+                </tr>
+        </table>
+        <table align=center bgcolor="$ui.tableColor" border=0 cellpadding="5" width=100% >
+
+                <tr>
+                        <td width=30% align="centre">
+                                <b><font face="$ui.sansSerifFonts">Question</font></b>
+                        </td>
+                        <td  width=70% align="left">
+                                <font face="$ui.sansSerifFonts">
+                                <textarea name="Question" rows=3 cols=50 #if($mode=="View") readonly #end >$finalqp.getQuestion()</textarea >
+                        </td>
+                </tr>
+                <tr>
+                        <td width=30% align="centre">
+                                <b><font face="$ui.sansSerifFonts">Marks</font></b>
+
+                        </td>
+                        <td> <input type="text" name="marks" value="$!finalqp.getMarks()"></td>
+                </tr>
+                #if($finalqp.getQuestype() == "mcq")     
+                <tr bgcolor="$ui.menuColor">
+			#formCell("$brih_option $brih_a" "op1" "$!finalqp.getOption1()")
+                </tr>
+                <tr>
+			#formCell("$brih_option $brih_b" "op2" "$!finalqp.getOption2()")
+                </tr>
+                <tr bgcolor="$ui.menuColor">
+			#formCell("$brih_option $brih_c" "op3" "$!finalqp.getOption3()")
+                </tr>
+                <tr>
+			#formCell("$brih_option $brih_d" "op4" "$!finalqp.getOption4()")
+		</tr>
+		<tr bgcolor="$ui.menuColor">
+                        <td width=30% align="centre">
+                                <b><font face="$ui.sansSerifFonts"> #if($lang=="hindi") Answer #else Answer #end</font></i>
+                        </td>
+                        <td width=70% align="left">
+                                <font face="$ui.sansSerifFonts">
+                                <select name="answer" size=1 class="drop">
+                                        <option value=$!finalqp.getAnswer()>$!finalqp.getAnswer()
+                                        <option value="A">A</option>
+                                        <option value="B">B</option>
+                                        <option value="C">C</option>
+                                        <option value="D">D</option>
+                                </select>
+                        </td>
+                </tr>
+                #end
+
+                #if($finalqp.getQuestype() =="tft") 
+                <tr>
+                        <td style="width:200px;" align="left"><b>Answer</b></td>
+                        <td><select name="answer" size=1 class="drop">
+                                <option value=$!finalqp.getAnswer()>$!finalqp.getAnswer()
+                                <option value="true">True
+                                <option value="false">False
+                                </select>
+                        </td>
+                </tr>
+                #end
+		#if($!finalqp.getQuestype()=="sat")
+                <tr>
+			<td style="width:200px;" align="left"><b>Answer</b>
+                        <td colspan=2>
+                                <textarea name="answer" wrap="physical" rows=2 cols=40 > $!finalqp.getAnswer() </textarea>
+                        </td>
+
+                </tr>
+                #end
+
+                #if($!finalqp.getQuestype()=="fillblanks")
+                <tr>
+                        <td style="width:200px;" align="left"><b>Answer</b></td>
+			 <td><input type="text" name="answer" value="$!finalqp.getAnswer()"></td>
+                </tr>
+                #end
+                <tr bgcolor="$ui.tableColor">
+                        <td align=center colspan=2>
+                                <font face ="$ui.sansserifFonts">
+                                <input type="button" class="button-ftextstyle" name="eventSubmit_doEditQuestion" value="Update" onClick="checkValue(document.frm,this);">
+                                <input type="reset" class="button-ftextstyle" value="Reset">
+                        </td>
+                </tr>
+#end
+        </table>
+                <input type="hidden" name="actionName">
+                <input type="hidden" name="quesid" value="$quesid">
+                <input type="hidden" name="qpfile" value="$exmqp">
+                <input type="hidden" name="count" value="$tdcolor">
+		<input type="hidden" name="Questype" value="$Questype">
+</form>
+
+<SCRIPT LANGUAGE="javascript">
+var Questype="$Questype";
+function checkValue(frm,field)
+        {
+                var qst=frm.Question.value;
+                var qstpart=qst.split("\\");
+                var fqst="";
+                for(i = 0; i < qstpart.length; i++)
+                {
+                        if(i==0){
+                                fqst=qstpart[i];
+                        }else{
+                        fqst= fqst +"\\"+"\\"+qstpart[i];
+                        }
+                }
+                frm.Question.value=fqst;
+
+                if(frm.Question.value!="")
+                {
+			if(Questype == "mcq"){
+
+                        	if((frm.op1.value!="") && (frm.op2.value!="") && (frm.op3.value!="") && (frm.op4.value!=""))
+                        	{
+                                	frm.actionName.value=field.name;
+                                	frm.submit();
+                        	}
+                        	else
+                        	{
+                                	alert("Please write minimum four answer !!");
+                                	frm.op1.focus();
+                        	}
+			}
+                        else{
+
+                                frm.actionName.value=field.name;
+                                frm.submit();
+                        }
+
+                }
+                else
+                {
+                        alert("Please write Question !!");
+                        frm.Question.focus();
+                }
+        }
+
+</script>

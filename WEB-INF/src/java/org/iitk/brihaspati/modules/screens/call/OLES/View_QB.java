@@ -59,10 +59,11 @@ import org.iitk.brihaspati.modules.utils.ViewAllQuestionUtil;
 import org.iitk.brihaspati.modules.utils.NotInclude;
 //import org.apache.commons.lang.StringUtils;
 //import org.iitk.brihaspati.modules.utils.XmlWriter;
-//import org.iitk.brihaspati.modules.utils.FileEntry;
+import org.iitk.brihaspati.modules.utils.FileEntry;
 import org.iitk.brihaspati.modules.utils.GroupUtil;
 import org.iitk.brihaspati.modules.utils.UserGroupRoleUtil;
 import org.iitk.brihaspati.modules.utils.CourseUserDetail;
+import org.iitk.brihaspati.modules.utils.QuizFileEntry;
 /**
 * This class manage all online examination system 
 * @author <a href="mailto:palseema30@gmail.com">Manorama Pal</a>
@@ -94,11 +95,38 @@ public class View_QB extends SecureScreen{
 			String difflevel=pp.getString("difflevel","");
 			context.put("difflevel",difflevel);
 			String checkstatus=pp.getString("checkstatus","");
+//==============================add by seema
+			String quespaper=pp.getString("quespaper","");
+			context.put("quespaper",quespaper);
+//==============================add by seema
+
+
+		
 			File dir=new File(data.getServletContext().getRealPath("/QuestionBank"));
 
                         Vector allQuestions=new Vector();
                         String filePath=data.getServletContext().getRealPath("/QuestionBank"+"/"+username+"/"+crsId);
 			TopicMetaDataXmlReader topicmetadata=null;
+		//==============================add by seema
+                        Vector allTopics=new Vector();
+                        File f=new File(filePath+"/QBtopiclist.xml");
+                        if(f.exists())
+                        {
+                             // checkstatus="NoBlank";
+                                topicmetadata=new TopicMetaDataXmlReader(filePath+"/QBtopiclist.xml");
+                                allTopics=topicmetadata.getQuesBanklist_Detail();
+				if(allTopics!=null){
+                                	for(int i=0;i<allTopics.size();i++)
+                                        {//for
+                                        	String topicnew=((FileEntry) allTopics.elementAt(i)).getTopic();
+                                                FileEntry fileEntry=new FileEntry();
+                                                fileEntry.setTopic(topicnew);
+                                                allTopics.add(fileEntry);
+                                         }
+                                 }
+                                context.put("allTopics",allTopics);
+                        }
+//==============================add by seema
 			if(!questiontype.equals("")&&(!difflevel.equals("")))
 			{
 				allQuestions=ViewAllQuestionUtil.ReadTopicAllFile(topic,filePath,questiontype,difflevel);
@@ -122,6 +150,7 @@ public class View_QB extends SecureScreen{
                                	checkstatus="blank";
                        	}
 			context.put("checkstatus",checkstatus);
+			
 			/**
                          *Time calculaion for how long user use this page.
                          */

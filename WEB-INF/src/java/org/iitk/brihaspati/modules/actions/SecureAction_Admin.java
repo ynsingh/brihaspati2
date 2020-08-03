@@ -38,7 +38,9 @@ import org.apache.turbine.modules.actions.VelocitySecureAction;
 import org.apache.turbine.modules.screens.TemplateScreen;
 import org.apache.turbine.services.security.TurbineSecurity;
 import org.apache.turbine.util.security.AccessControlList;
-import org.apache.turbine.services.resources.*;
+//import org.apache.turbine.services.resources.*;
+import org.apache.commons.configuration.Configuration;
+import org.apache.turbine.Turbine;
 /**
  * Velocity Secure action.
  *
@@ -78,16 +80,15 @@ public class SecureAction_Admin extends VelocitySecureAction
          */
         AccessControlList acl = data.getACL();
         //if (acl == null || ! acl.hasPermission("default_view", "group"))
-        if (acl == null || ! acl.hasRole("turbine_root"))
-        {
-                setTemplate(data,"TestForm.vm");
-		isAuthorized = false;
-        }
-        //else if( acl.hasPermission("default_view", "group"))
-        else
-        {
-            isAuthorized = true;
-        }
+	if (acl == null || !acl.hasRole("turbine_root"))
+                {
+                        data.setScreenTemplate(Turbine.getConfiguration().getString("template.login"));
+                        isAuthorized = false;
+                }
+                else
+                {
+                        isAuthorized = true;
+                }
 
         return isAuthorized;
     }

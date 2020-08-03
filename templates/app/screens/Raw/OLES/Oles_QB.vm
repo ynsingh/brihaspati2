@@ -58,6 +58,11 @@ $!data.getMessage()
 ## Adding links for  add category,showing list of Faq category and delte category
 <table width="100%">
 		<tr bgcolor="$ui.tableColor" width="100%">
+			<td colspan=8>
+                         <b><a href=$link.setPage("call,OLES,Create_QuesPaper.vm").addPathInfo("count","1") style=text-decoration:none>Create Question Paper &nbsp;&nbsp;</b></a></td>
+ 
+ 		</tr>
+ 		<tr bgcolor="$ui.tableColor" width="100%">
 			#if($tdcolor != "1")
                         <td>
                         #elseif($tdcolor == "1")

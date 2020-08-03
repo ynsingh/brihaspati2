@@ -73,7 +73,19 @@ $!data.getMessage()
 		</tr>
 		</table>
 <table width="100%" bgcolor="$ui.tableColor">
+ 		#if($quespaper =="quespaper" && $checkstatus=="Noblank")
+                 <tr bgcolor="$ui.menuColor"><td align="left"><b><i>Select Question Bank topic<b></i></td>
+                 <td>
+                 <select name="topic" class="drop" />
+                 #foreach ($topics in $allTopics)
+                 <option value="$topics.getTopic()">$topics.getTopic()</option>
+                 #end
+                 </select>
+                 </td>   
+                 ##addbyseema=====================================
+		#else
 		<tr bgcolor="$ui.menuColor"><td align="left"><b><i>$brih_qus2 $brih_of $topic<b></i></td>
+		#end
 			<td><b>$brih_qus $brih_type</b><font color=Red>*</font>
                         </td>
                         <td>
