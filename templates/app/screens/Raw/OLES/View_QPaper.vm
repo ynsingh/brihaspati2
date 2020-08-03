@@ -1,0 +1,178 @@
+#*
+ * @#View_QPaper.vm
+ * Copyright (c) 2020 ETRG,IIT Kanpur.
+ * All Rights Reserved.
+ * @author <a href="mailto:palseema30@gmail.com ">Manorama Pal</a>
+*#
+
+$page.setTitle("Question Paper Preview")
+$page.setBgColor("bgcolor")
+<head>
+<link rel="stylesheet" type="text/css" href="$content.getURI("/scrpts/htmlarea.css")" media="screen"/>
+</head>
+
+## If some message has been set, that is retrieved and displayed.
+$!data.getMessage()
+## Retreiving the $lang (representing the choosen language for display, which was set in corresponding the screen class.
+
+#set($lang = $data.getUser().getTemp("lang").toString())
+<table bgcolor="$ui.menuColor" width=100%>
+        <tr><td><b>
+                <a href=$link.setPage("Index.vm") style='text-decoration:none'>$brih_home</a>|
+                <a href=$link.setPage("call,CourseMgmt_User,CourseHome.vm") style='text-decoration:none'>$course</a> |
+               	<a href=$link.setPage("call,OLES,Create_QuesPaper.vm").addPathInfo("count","1") style='text-decoration:none'> Question Paper</a> |
+                View Question Paper
+        </b></td>
+## Creating the links for help regarding Quiz 
+<td align=right><img src="$content.getURI("/images/hand.gif")"><a href=javascript:popupWin("/brihaspati/docs/OLES_Quiz.html","newWin") style='text-decoration:none'>$brih_help</a></td>
+</tr>
+</table>
+#set($cnm = $data.getUser().getTemp("course_name" ).toString())
+<form name="frm" method="post"  enctype="multipart/form-data" action=$link.setPage("call,OLES,View_QPaper.vm").setAction("OLES_QuesPaper")>
+
+<div align="left">
+<table align=center bgcolor="$ui.tableColor" border=0 cellpadding="5" width=100% >
+    <tr>
+        <td align=center colspan=2 >
+                <font size=4><b>Question Paper $brih_name : $exmqp </b></font>
+        </td>
+    </tr>
+</table>
+
+
+#foreach($finalqp in $qpaper)
+        #if($velocityCount%2==0)
+                <table align=center bgcolor="$ui.menuColor" cellpadding="3" width=100% >
+        #else
+                <table align=center bgcolor="$ui.tableColor" cellpadding="3" width=100%>
+        #end
+        <tr>
+                <td align=left colspan=2 width=30%>
+                        <font size=4> <b>$brih_qus </b></font>
+                </td>
+                <td>
+                        $!finalqp.getQuestion()
+
+                </td>
+                <td>
+                        $!finalqp.getMarks()
+                </td>
+        </tr>
+<tr>
+
+                <td>
+                        <table align=center border=0 cellpadding="5" width=100% >
+                                #set($a="")                     
+                                #set($k="")                     
+                                #set($c="")                     
+                                #set($d="")                     
+                                #if($finalqp.getQuestype() == "mcq")
+                                        #if($finalqp.getAnswer()=="$brih_a")
+                                                #set($a="checked")
+                                        #elseif($finalqp.getAnswer()=="$brih_b")
+                                                #set($k="checked")
+                                        #elseif($finalqp.getAnswer()=="$brih_c")
+                                                #set($c="checked")
+                                        #else
+                                                #set($d="checked")
+                                        #end
+                                        <tr>
+                                                <td align=left colspan=2 > <b> $brih_a </b>
+                                                        <INPUT TYPE="CHECKBOX" NAME="A" VALUE = "" $a disabled>
+                                                        $!finalqp.getOption1()
+                                                </td>
+                                                <td align=left colspan=2 ><b> $brih_b </b>
+                                                        <INPUT TYPE="CHECKBOX" NAME="B" VALUE = "" $k disabled>
+            $!finalQ.getOption2()
+                                                </td>
+                                        </tr>
+                                        <tr>
+                                                <td align=left colspan=2 > <b> $brih_c </b>
+                                                        <INPUT TYPE="CHECKBOX" NAME="C" VALUE ="" $c disabled>
+                                                        $!finalqp.getOption3()
+                                                </td>
+                                                <td align=left colspan=2> <b> $brih_d </b>
+                                                        <INPUT TYPE="CHECKBOX" NAME="D" VALUE ="" $d disabled>
+                                                        $!finalqp.getOption4()
+                                                </td>
+                                        </tr>
+                                #end
+                                #if($finalqp.getQuestype() == "tft")
+                                        #if($finalqp.getAnswer()=="true")
+                                                #set($a="checked")
+                                                #set($k="")
+                                        #elseif($finalqp.getAnswer()=="false")
+                                                #set($k="checked")
+                                                #set($a="")
+                                        #end
+                                        <tr>
+                                                <td align=left colspan=2>
+                                                        <input type="RADIO" name="$velocityCount"  value="A"  $!a disabled>                                             
+                                                        $brih_true
+                                                </td>
+                                                <td align=left colspan=2 >
+                                                        <input type="RADIO" name="$velocityCount" value="B"  $!k disabled>                                              
+                                                        $brih_false
+                                                </td>
+                                        </tr>
+                                #end                    
+                        </table>
+                </td>
+        </tr>
+ #if($finalqp.getQuestype()=="sat")
+                <tr>
+                        <td align=left colspan=2 width=30%>
+                                <font size=4> <b> $brih_correct  $brih_answer </b></font>
+                        </td>
+                        <td align=left colspan=2>
+                                <textarea name="message" wrap="physical" rows=2 cols=40 "readonly" > $!finalqp.getAnswer() </textarea>
+                        </td>
+                </tr>
+        #else
+                <tr>
+                        <td align=left colspan=2 width=30%>
+                                <font size=4> <b>$brih_correct  $brih_answer </b></font>
+                        </td>
+                        <td>
+                                $!finalqp.getAnswer()
+                        </td>
+                </tr>
+        #end
+	<tr>
+                <td align=right colspan=3><a href="$link.setPage("call,OLES,View_QPaper.vm").setAction("OLES_QuesPaper").addPathInfo("qpfile",$exmqp).addPathInfo("quesid",$!finalqp.getquesID()).addPathInfo("actionName","eventSubmit_dodeleteQuestion")" style=text-decoration:none onclick="javascript:return confirm('Do you want to delete this question !!')"> #if($lang =="hindi" || $lang == "gujarati")  Delete #else Delete #end </a></td>
+                <td align=right><a href="$link.setPage("call,OLES,Edit_QPaper.vm").addPathInfo("qpfile",$exmqp).addPathInfo("quesid",$!finalqp.getquesID()).addPathInfo("Questype",$finalqp.getQuestype())" style=text-decoration:none > Edit </a></td>
+        </tr>
+
+        <hr style="height:1px;border-width:0;color:black;background-color:black" />
+#end 
+</div>
+</table>
+<input type="hidden" name="actionName">
+<input type="hidden" name="finalQuestion" value="$finalqp">
+<input type="hidden" name="quesid" value="$quesid">
+<input type="hidden" name="qpfile" value="$exmqp">
+<input type="hidden" name="count" value="$tdcolor">
+</form>
+<SCRIPT LANGUAGE="javascript">
+
+        function checkField(frm,field){
+                if(confirm("Are u sure to overwrite the existing preview setting")){
+                        frm.actionName.value=field.name;
+                        frm.submit();
+                }
+                else{
+                        return false;
+                }
+        }
+
+        function checkValue(frm,field){
+                frm.actionName.value=field.name;
+                frm.submit();
+        }
+
+</script>
+
+
+</form>
+
+

@@ -24,8 +24,8 @@ $page.setBgColor("bgcolor")
 	<tr><td><b>
 		<a href=$link.setPage("Index.vm") style='text-decoration:none'>$brih_home</a>|
 		<a href=$link.setPage("call,CourseMgmt_User,CourseHome.vm") style='text-decoration:none'>$course</a> |
-		<a href=$link.setPage("call,OLES,Oles_Gen.vm").addPathInfo("count","1") style='text-decoration:none'> #if($lang =="hindi")$brih_exam $brih_generate #else $brih_generate $brih_exam #end</a> |
-		<a href=$link.setPage("call,OLES,Preview_Quiz.vm").addPathInfo("count","4") style='text-decoration:none'>$brih_preview</a> | 
+		##<a href=$link.setPage("call,OLES,Oles_Gen.vm").addPathInfo("count","1") style='text-decoration:none'> </a> |
+		<a href=$link.setPage("call,OLES,View_QPaper.vm").addPathInfo("count","4") style='text-decoration:none'>View Question Paper</a> | 
 		$quizName	
 	</b></td>
 ## Creating the links for help regarding Quiz 
@@ -46,23 +46,11 @@ $page.setBgColor("bgcolor")
 <div style="border:1px solid black;">
 	<table align=center bgcolor="$ui.tableColor" cellpadding="5" width=100% >
 		<tr bgcolor="$ui.menuColor" font face="$ui.sansSerifFonts">
-			<td align=left width=20% >
-				<font color="$ui.fontColorBlue"><b> $brih_max $brih_qus 
-			</td>
-			<td align=left width=5% >
-				<input type="text" name="maxQuestion" value="$noQuestions" readonly style="width:30px" >
-			</td>
 			<td align=left width=25% >
 				<font color="$ui.fontColorBlue"><b>$brih_max $brih_marks
 			</td>
 			<td align=left width=5% >
 				<input type="text" name="maxMarks" value="$maxMarks" readonly style="width:30px">
-			</td>
-			<td align=left width=25%>
-				<font color="$ui.fontColorBlue"><b>$brih_max $brih_time		
-			</td>
-			<td align=left width=5%>
-				<input type="text" name="maxTime" value="$maxTime" readonly style="width:30px">
 			</td>
 		</tr>
 		<tr border="1" bgcolor="$ui.tableColor" font face="$ui.sansSerifFonts">
@@ -72,14 +60,6 @@ $page.setBgColor("bgcolor")
 			<td align=left width=5% >
 				<input type="text" name="enteredQuestion" value="$enteredQuestion" readonly style="width:30px">
 			</td>
-			<td align=left width=25%>
-				<font color="$ui.fontColorBlue"><b> $brih_entered $brih_marks
-			</td>
-			<td align=left width=5%>
-				<input type="text" name="marks" value="$marks" readonly style="width:30px">
-			</td>
-			<td colspan="2" >
-			</td>				
 		</tr>
 	</table>
 </div>
