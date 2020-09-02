@@ -274,7 +274,8 @@ public class ViewFileContent extends SecureScreen
 			}else if(Type.equals("AnsCopy")) {
 				String docRoot=data.getServletContext().getRealPath("/Courses")+"/";
                        		String dir=(String)data.getUser().getTemp("course_id")+"/";
-				filePath=docRoot+dir+"AnsCopy/"+fileID;
+				String topic=pp.getString("topic","")+"/";
+				filePath=docRoot+dir+"AnsCopy/"+topic+fileID;
 			}
                         else{
 				String msg="Error in Raw Page for display contains !!";

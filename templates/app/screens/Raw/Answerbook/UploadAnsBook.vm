@@ -137,8 +137,8 @@ $!data.getMessage()
 <br><br>
       <tr>
 	#formCell ("$brih_exam $brih_name <font color=red>*</font>" "ENAME" "")
-      </tr>
-      <tr>
+      
+    	&nbsp;&nbsp;&nbsp;&nbsp; 
               #fileUpload (" &nbsp; $brih_at_file " "file1")</td> 
       </tr>
 
@@ -159,6 +159,58 @@ $!data.getMessage()
     </table>
   </div>
 </form>
+<br>
+	<table align="left" bgcolor="$ui.tableColor" width=100%>
+                        <tr>
+                                <td align="left" colspan=3><b>$brih_list $brih_of $brih_topic</b></td>
+                        </tr>
+                                #set($count=1)
+                                #foreach($file in $alldfile)
+                                #if($velocityCount%2==0)        
+                                <tr bgcolor="$ui.tableColor">
+                                #else
+                                <tr bgcolor="$ui.menuColor">
+                                #end
+                                <td> $count </td>
+                                <td><a href=$link.setPage("call,Answerbook,UploadAnsBook.vm").addPathInfo("topic",$file).addPathInfo("stat","fromSubDirectory") style=text-decoration:none>$file</a></td>
+                                <td><a href=$link.setPage("call,Answerbook,UploadAnsBook.vm").setAction("UploadAnsAction").addPathInfo("mode","DirRemoval").addPathInfo("topic",$file).addPathInfo("actionName","eventSubmit_doDelete") style=text-decoration:none onclick="javascript:return confirm('Do you want to delete this topic')">$brih_delete</a></td>
+                        </tr>
+                                #set($count=$count+1)
+                                #end
+                                #if($dflag)
+                        	<tr>
+                                <td align="left" colspan=3><b>$brih_dir  $brih_arenotexists</b></td>
+                        	</tr>
+                                #end
+        </table>
+
+        #if($stat == "fromSubDirectory")
+	<table align="left" bgcolor="$ui.tableColor" width=100%>
+                        <tr>
+                                <td align="left" colspan=4><b>$brih_list $brih_of $brih_file1 $topic</b></td>
+                        </tr>
+                                #set($count=1)
+                                #foreach($file in $alldfile1)
+                                #if($velocityCount%2==0)        
+                                <tr bgcolor="$ui.tableColor">
+                                #else
+                                <tr bgcolor="$ui.menuColor">
+                                #end
+                                <td> $count </td>
+                                <td> $file </td>
+				<td><a href=javascript:popupWin("$link.setPage("call,ViewFileContent.vm").addPathInfo("topic",$topic).addPathInfo("type","AnsCopy").addPathInfo("filename",$file)","newWin") style=text-decoration:none>$brih_view</a></td>
+                                <td><a href=$link.setPage("call,Answerbook,UploadAnsBook.vm").setAction("UploadAnsAction").addPathInfo("filename",$file).addPathInfo("topic",$topic).addPathInfo("actionName","eventSubmit_doDelete") style=text-decoration:none onclick="javascript:return confirm('Do you want to delete this topic')">$brih_delete</a></td>
+                        </tr>
+                                #set($count=$count+1)
+                                #end
+                                #if($fflag)
+                        	<tr>
+                                <td align="left" colspan=4><b>$brih_file $brih_arenotexists</b></td>
+                        	</tr>
+                                #end
+        </table>
+        #end
+
 <SCRIPT language="JavaScript">
         function popupWin(url,popupName)
         {
