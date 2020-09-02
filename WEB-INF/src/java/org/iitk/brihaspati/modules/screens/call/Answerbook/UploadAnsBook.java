@@ -34,16 +34,18 @@ package org.iitk.brihaspati.modules.screens.call.Answerbook;
  *  Contributors: Members of ETRG, I.I.T. Kanpur
  *
  */
-
+//JDK
 import java.io.File;
 import java.util.List;
+import java.util.Arrays;
 import java.math.BigDecimal;
-
-import org.apache.turbine.util.RunData;
-import org.apache.turbine.om.security.User;
+//apache
 import org.apache.torque.util.Criteria;
+import org.apache.turbine.util.RunData;
 import org.apache.velocity.context.Context;
-
+import org.apache.turbine.om.security.User;
+import org.apache.turbine.util.parser.ParameterParser;
+//brihaspati
 import org.iitk.brihaspati.om.Courses;
 import org.iitk.brihaspati.om.CoursesPeer;
 import org.iitk.brihaspati.modules.utils.UserUtil;
@@ -59,15 +61,29 @@ import org.iitk.brihaspati.modules.screens.call.SecureScreen_Instructor;
  */
 public class UploadAnsBook extends SecureScreen_Instructor {
 
+//	 MultilingualUtil mu=new MultilingualUtil();
+
+	 /**
+        *@param data RunData
+        *@param context Context
+        */
+
 	public void doBuildTemplate(RunData data,Context context)
 	{
 		try{
-		
-	//	Vector v=new Vector();
+		String file=data.getUser().getTemp("LangFile").toString();
+
 		User user=data.getUser();
 		String uName=user.getName();
+                context.put("uname",uName);
                 int uid=UserUtil.getUID(uName);
-//		ParameterParser pp=data.getParameters(); 	
+		ParameterParser pp=data.getParameters(); 	
+
+		String Content=pp.getString("topic","");
+		context.put("topic",Content);
+		String status=pp.getString("stat","");
+                context.put("stat",status);
+
 		String dir=(String)user.getTemp("course_id");
 		context.put("course",(String)user.getTemp("course_name"));
 
@@ -76,22 +92,23 @@ public class UploadAnsBook extends SecureScreen_Instructor {
 		long unpdir=QuotaUtil.getDirSizeInMegabytes(dirHandle1);
 		context.put("TUSize",unpdir);
 
+
 		String filePath=data.getServletContext().getRealPath("/Courses")+"/"+dir+"/AnsCopy";		
 		File dirHandle=new File(filePath);
-	//	File UnpubDir=null;
-	//	String filter[]={"Permission","Remotecourse","content__des.xml"};
-  //        //      NotInclude exclude=new  NotInclude(filter);
-	//	String file[]=dirHandle.list(exclude);
-//	//	long unpdir=0;
-	//	for(int i=0;i<file.length;i++)
-	//	{
-	//		v.addElement(file[i]);
-	//	}
-	//	context.put("allTopics",v);
+		List listfile=Arrays.asList(dirHandle.list());
+		context.put("alldfile",listfile);
+		context.put("dflag",(listfile.size() >0)?false:true);
+
+		if(status.equals("fromSubDirectory"))
+                {
+			filePath=filePath+"/"+Content;
+			dirHandle=new File(filePath);
+			List listfile1=Arrays.asList(dirHandle.list());
+			context.put("alldfile1",listfile1);
+			context.put("fflag",(listfile1.size() >0)?false:true);
+		}
+
 		long tlmt=0;
-
-
-
 		Criteria crit=new Criteria();
 		crit.add(CoursesPeer.GROUP_NAME,dir);
 		List lst=CoursesPeer.doSelect(crit);

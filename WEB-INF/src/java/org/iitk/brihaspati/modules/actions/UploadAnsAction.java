@@ -41,32 +41,30 @@ import java.io.BufferedOutputStream;
 import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
+//apache
+import org.apache.torque.util.Criteria;
+import org.apache.velocity.context.Context;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.fileupload.FileItem;
-import org.apache.torque.util.Criteria;
-import org.apache.velocity.context.Context;
 import org.apache.turbine.util.RunData;
 import org.apache.turbine.om.security.User;
 import org.apache.turbine.util.parser.ParameterParser;
 import org.apache.turbine.services.servlet.TurbineServlet;
-import org.apache.turbine.services.security.torque.om.TurbineUserGroupRolePeer;
-import org.apache.turbine.services.security.torque.om.TurbineUserGroupRole;
-
-import org.apache.turbine.services.security.torque.om.TurbineUserPeer;
 import org.apache.turbine.services.security.torque.om.TurbineUser;
-import org.iitk.brihaspati.modules.utils.MailNotificationThread;
-
-import org.iitk.brihaspati.om.LiveclassPeer;
+import org.apache.turbine.services.security.torque.om.TurbineUserPeer;
+import org.apache.turbine.services.security.torque.om.TurbineUserGroupRole;
+import org.apache.turbine.services.security.torque.om.TurbineUserGroupRolePeer;
+//brihaspati
 import org.iitk.brihaspati.om.Liveclass;
+import org.iitk.brihaspati.om.LiveclassPeer;
+import org.iitk.brihaspati.modules.utils.UserUtil;
 import org.iitk.brihaspati.modules.utils.GroupUtil;
 import org.iitk.brihaspati.modules.utils.CourseUtil;
-import org.iitk.brihaspati.modules.utils.UserUtil;
 import org.iitk.brihaspati.modules.utils.ErrorDumpUtil;
 import org.iitk.brihaspati.modules.utils.MultilingualUtil;
-
-//import org.iitk.brihaspati.modules.utils.MailNotificationThread;
+import org.iitk.brihaspati.modules.utils.SystemIndependentUtil;
+import org.iitk.brihaspati.modules.utils.MailNotificationThread;
 
 /**
  * @author <a href="mailto:nksinghiitk@yahoo.co.in">Nagendra Kumar Singh</a> 
@@ -195,6 +193,70 @@ public class UploadAnsAction extends SecureAction_Instructor
 	}
 
 	/**
+        * Method for deleting the file/folder from copyans
+        * @param data RunData
+        * @param context Context
+        */
+	public void doDelete(RunData data,Context context)
+        {
+                String langFile=data.getUser().getTemp("LangFile").toString();
+                try
+                {
+                        User user=data.getUser();
+			String dir=(String)user.getTemp("course_id");
+
+                        /**
+                        *Retreive the Parameters by help of
+                        *Parameter Parser and put in the context
+                        *for using in templates
+                        */
+                        ParameterParser pp=data.getParameters();
+                        String Filename=pp.getString("filename","");
+                        String mode=pp.getString("mode","");
+                        String Content=pp.getString("topic","");
+			context.put("topic",Content);
+                        /**
+                        *Get the RealPath and Path of
+                        *Private Area in which the topic exist
+                        */
+			String fileRealPath=TurbineServlet.getRealPath("/Courses/"+dir);
+                        if(mode.equals("DirRemoval"))
+                        {
+                                /**
+                                *Delete the topic name exist
+                                *@see SystemIndependentUtil in utils
+                                */
+				File filePath=new File(fileRealPath+"/AnsCopy/"+Content);
+                                SystemIndependentUtil.deleteFile(filePath);
+                                String del1=MultilingualUtil.ConvertedString("personal_del1",langFile);
+                                if(langFile.equals("english"))
+                                        data.setMessage(Content+" "+del1);
+                                else
+                                        data.setMessage(del1+" "+Content+" ");
+                        }
+                        else
+                        {
+                               /**
+                                *Get the Path where the file exist in
+                                *the particular topic in the 
+                                */
+                                File fileway=new File(fileRealPath+"/AnsCopy/"+Content+"/"+Filename);
+                                SystemIndependentUtil.deleteFile(fileway);
+                                String del2=MultilingualUtil.ConvertedString("personal_del2",langFile);
+                                        if(langFile.equals("english"))
+                                                data.setMessage(Filename+" "+del2);
+                                        else
+                                                data.setMessage(del2+" "+Filename+" ");
+                        }
+                }
+                catch(Exception e){
+			ErrorDumpUtil.ErrorLog("Exception in Delete function in answer book action "+e.getMessage());
+		}
+       }
+
+
+
+	/**
 	 * This method performs the action for upload student answer book in the course
 	 * @param data RunData
 	 * @param context Context
@@ -293,6 +355,8 @@ public class UploadAnsAction extends SecureAction_Instructor
                         doUploadAnsCopy(data,context);
 		else if(action.equals("eventSubmit_doAnnouncment"))
 			doAnnounceLiveClass(data,context);
+		else if(action.equals("eventSubmit_doDelete"))
+			doDelete(data,context);
 
 		else
 			data.setMessage(MultilingualUtil.ConvertedString("usr_prof2",LangFile));
