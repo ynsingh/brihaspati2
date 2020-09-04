@@ -95,10 +95,14 @@ public class UploadAnsBook extends SecureScreen_Instructor {
 
 		String filePath=data.getServletContext().getRealPath("/Courses")+"/"+dir+"/AnsCopy";		
 		File dirHandle=new File(filePath);
-		List listfile=Arrays.asList(dirHandle.list());
-		context.put("alldfile",listfile);
-		context.put("dflag",(listfile.size() >0)?false:true);
+		if (dirHandle.exists() && dirHandle.isDirectory()) {
+			List listfile=Arrays.asList(dirHandle.list());
+			context.put("alldfile",listfile);
+			context.put("dflag",(listfile.size() >0)?false:true);
+		}else{
+			context.put("dflag",true);
 
+		}
 		if(status.equals("fromSubDirectory"))
                 {
 			filePath=filePath+"/"+Content;

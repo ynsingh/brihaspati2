@@ -61,6 +61,8 @@ import java.io.File;
 import java.util.Vector;
 import java.util.Iterator;
 import org.iitk.brihaspati.modules.utils.StringUtil;
+import org.iitk.brihaspati.modules.utils.PasswordUtil;
+import org.iitk.brihaspati.modules.utils.EncryptionUtil;
 
 
 /**
@@ -322,7 +324,7 @@ public class ResendActivation extends VelocityAction{
 			// Get user id
 			int cmpid=-1;
                 	int uid=UserUtil.getUID(e_mail);
-                	boolean Result= uid == cmpid;
+                	boolean Result= (uid == cmpid);
 		
                 	if(Result){
 	                	  try{
@@ -332,7 +334,7 @@ public class ResendActivation extends VelocityAction{
                           	    catch (Exception ex){
 					String msg = "Error in activation	";
                                		ErrorDumpUtil.ErrorLog("User not registered in Brihaspati LMS inside 1st catch "+ex);
-				 	throw new RuntimeException(msg,ex);
+				 //	throw new RuntimeException(msg,ex);
                           	    }
 			}//if 1
 			else{
@@ -343,7 +345,57 @@ public class ResendActivation extends VelocityAction{
                           		crit.add(UserPrefPeer.USER_ID,uid);
                           		List list = UserPrefPeer.doSelect(crit);
                           		a_key =((UserPref)list.get(0)).getActivation();
-			  		if (a_key == null || a_key.equalsIgnoreCase("NULL"))
+
+					if((a_key == "ACTIVATE") || (a_key.equalsIgnoreCase("ACTIVATE")))
+			   		{
+						try{
+							str=MultilingualUtil.ConvertedString("ac_activate",LangFile);
+	                              			data.setMessage(str);
+                                		}
+                                		catch (Exception ex){
+							String msg2 = "Error in activation	";
+                                        		ErrorDumpUtil.ErrorLog("User account already exists inside 3rd catch"+ex);
+					 	//	throw new RuntimeException(msg2,ex);
+						}
+			   		}//if 3
+					else{
+						// Generate Key
+						String randm_n = PasswordUtil.randmPass();
+                                                String estr=randm_n+e_mail;
+                                                String na_key=EncryptionUtil.createDigest("SHA1",estr);
+						//Update the database to set Activation field
+                        	                crit = new Criteria();
+                	                        crit.add(UserPrefPeer.USER_ID,uid);
+        	                                crit.add(UserPrefPeer.ACTIVATION,na_key);
+	                                        UserPrefPeer.doUpdate(crit);
+						//sending activation link in the mail
+						fileName=TurbineServlet.getRealPath("/WEB-INF/conf/brihaspati.properties");
+						pr =MailNotification.uploadingPropertiesFile(fileName);
+						msgDear = pr.getProperty("brihaspati.Mailnotification.newUser.msgDear");
+						msgDear = MailNotification.getMessage_new(msgDear, "Brihaspati", "User", "", e_mail);
+						msgRegard=pr.getProperty("brihaspati.Mailnotification.newUser.msgRegard");
+						msgRegard = MailNotification.replaceServerPort(msgRegard);
+						subject=pr.getProperty("brihaspati.Mailnotification.newUser.a_subject");
+						messageFormate = pr.getProperty("brihaspati.Mailnotification.newUser.a_message");
+						activationLink=pr.getProperty("brihaspati.Mailnotification.newUser.activationLink");
+						activationLink=MailNotification.getMessage(activationLink, e_mail, na_key,"", lang);
+						activationLink=MailNotification.replaceServerPort(activationLink);
+                                                messageFormate = messageFormate+activationLink;
+						Mail_msg = MailNotificationThread.getController().set_Message(messageFormate, msgDear, msgRegard, "", e_mail, subject, "", "");
+						try{
+                                        		ErrorDumpUtil.ErrorLog("New activation key generated and updated in database corresponding User account "+na_key);
+                                                        str=MultilingualUtil.ConvertedString("act_mail",LangFile);
+                                                        data.setMessage(str);
+                                                 }
+                                                catch (Exception ex){
+                                                        String msg3 = "Error in activation      ";
+                                                        ErrorDumpUtil.ErrorLog("Activation mail sending inside th catch "+ex);
+                                                        throw new RuntimeException(msg3);
+                                                }
+
+					}
+// start comment here
+			  	/*	if (a_key == null || a_key.equalsIgnoreCase("NULL"))
 			  		{
 						
 						fileName=TurbineServlet.getRealPath("/WEB-INF/conf/brihaspati.properties");
@@ -396,7 +448,7 @@ public class ResendActivation extends VelocityAction{
                                 		else
                                       			info_Opt = "newUserhttps";
 						*/
-						fileName=TurbineServlet.getRealPath("/WEB-INF/conf/brihaspati.properties");
+/*						fileName=TurbineServlet.getRealPath("/WEB-INF/conf/brihaspati.properties");
                                 		pr =MailNotification.uploadingPropertiesFile(fileName);
 						//msgDear = pr.getProperty("brihaspati.Mailnotification."+info_Opt+".msgDear");
                                 		msgDear = pr.getProperty("brihaspati.Mailnotification.newUser.msgDear");
@@ -447,7 +499,9 @@ public class ResendActivation extends VelocityAction{
 
 					   	}
 					}//else 3
-				
+// end comment here
+
+				*/
 			  	}//try 1
 			 	catch(Exception ex){
                                 	String msg5 = "Error in activation   ";
