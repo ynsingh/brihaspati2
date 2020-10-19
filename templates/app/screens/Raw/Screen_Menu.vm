@@ -134,10 +134,10 @@
                 <tr bgcolor="$ui.tableColor">
                          <td class="dt">
 			#if($data.getUser().getTemp("role") == "instructor")
-			<a href=$link.setPage("call,Assignment,ASS_subm.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","assignment").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_assignment</a>
+			<a href=$link.setPage("call,Assignment,ASS_subm.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","assignment").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_assignment / $brih_Subjective $brih_exam</a>
 			#end
 	                #if($data.getUser().getTemp("role") == "student")
-                        <a href=$link.setPage("call,Assignment,ViewAss.vm").addPathInfo("count","1") style=text-decoration:none>$brih_assignment</a>
+                        <a href=$link.setPage("call,Assignment,ViewAss.vm").addPathInfo("count","1") style=text-decoration:none>$brih_assignment / $brih_Subjective $brih_exam</a>
         	        #end
 
 		
@@ -176,12 +176,12 @@
 	##if($data.getUser().getTemp("modulename1") == "1")
 	<tr bgcolor="$ui.menuColor"><td style="height: 8px;"></td></tr>
 	<tr bgcolor="$ui.tableColor">
-		<td class="dt"><a href=$link.setPage("call,Assignment,ASS_subm.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","assignment").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_assignment</a></td>
+		<td class="dt"><a href=$link.setPage("call,Assignment,ASS_subm.vm").addPathInfo("count","1").addPathInfo("cname",$groupName).addPathInfo("mname","assignment").addPathInfo("actionName","eventSubmit_doModuleInsert").setAction("ModuleLogin") style=text-decoration:none>$brih_assignment / $brih_Subjective $brih_exam</a></td>
 	</tr>
 
 	#*#else
         <tr bgcolor="$ui.tableColor">
-                <td class="dt"><font color="#B2B2B2"> $brih_assignment </font></td>
+                <td class="dt"><font color="#B2B2B2"> $brih_assignment / $brih_Subjective $brih_exam</font></td>
         </tr>
 	#end*#
 	<tr bgcolor="$ui.menuColor"><td style="height: 8px;"></td></tr>

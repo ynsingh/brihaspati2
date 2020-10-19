@@ -125,13 +125,18 @@ public class Assignments extends SecureAction
                         String day=pp.getString("Start_day");
                         String hours=pp.getString("Start_hour");
                         String mins=pp.getString("Start_min");
-                        String pubst=pp.getString("publish");
+                        String pubst=pp.getString("publish","1");
 //			ErrorDumpUtil.ErrorLog("list of assignment-------------"+pubst);
 			if(pubst.equalsIgnoreCase("0"))            // modified by ankita dwivedi
 				pubst="0";
 			else
 				pubst="1";
 
+                        String syear=pp.getString("Start_yeara");
+                        String smonth=pp.getString("Start_mona");
+                        String sday=pp.getString("Start_daya");
+                        String shours=pp.getString("Start_houra");
+                        String smins=pp.getString("Start_mina");
 			/**
                         *Get mode for update and delete Assingnment
                         */
@@ -149,7 +154,9 @@ public class Assignments extends SecureAction
                         */				
 				
                         String Duedate=year+"-"+month+"-"+day+" "+hours+":"+mins+":00";
-			ErrorDumpUtil.ErrorLog("The due date is "+Duedate);
+			ErrorDumpUtil.ErrorLog("The due date time is "+Duedate);
+                        String startdate=syear+"-"+smonth+"-"+sday+" "+shours+":"+smins+":00";
+			ErrorDumpUtil.ErrorLog("The start date time is "+startdate);
 			/**
 			* create current Date 
 			*/
@@ -162,12 +169,15 @@ public class Assignments extends SecureAction
                         int GID=GroupUtil.getGID(courseid);
                         Date Cur_date=new Date((dateFormat.parse(curdate)).getTime());
                         Date Post_date=new Date((dateFormat.parse(Duedate)).getTime());
+                        Date Start_date=new Date((dateFormat.parse(startdate)).getTime());
 //			ErrorDumpUtil.ErrorLog("I am reached here"+Post_date +" and c date "+Cur_date);
                         long longCurDate= Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
                         long longDueDate= Long.parseLong(((Duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+                        long longStartDate= Long.parseLong(((startdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
 //			ErrorDumpUtil.ErrorLog("I am reached here long"+ longDueDate+" and c date "+longCurDate);
 
                         int Edate=(int)((((Post_date.getTime()) - (Cur_date.getTime()))/(24*3600*1000))+1);
+//                        int Edate=(int)((((Post_date.getTime()) - (Start_date.getTime()))/(24*3600*1000))+1);
                         String News= "New Assignment "+Duedate;
 //			ErrorDumpUtil.ErrorLog(" The edate is "+Edate +" and news is "+News);
 																
@@ -181,6 +191,9 @@ public class Assignments extends SecureAction
                         int Year1=Integer.parseInt(year);
                         int Month1=Integer.parseInt(month);
 			int Day=Integer.parseInt(day);
+                        int Year2=Integer.parseInt(syear);
+                        int Month2=Integer.parseInt(smonth);
+			int Day2=Integer.parseInt(sday);
 			boolean flag=false;
 
                         /** Expiry date get using ExpiryUtil and convert String type to Date type*/
@@ -193,15 +206,19 @@ public class Assignments extends SecureAction
 				msg= MultilingualUtil.ConvertedString("assignment_msg4",LangFile);
 	                 	data.setMessage(msg);
                         }
-                        else if(longDueDate >= longCurDate)
+                        else if((longDueDate >= longCurDate)&&(longDueDate > longStartDate))
                         {
-                                if((Month1==4||Month1==6||Month1==9||Month1==11) && (Day>30))
+                                if(((Month1==4||Month1==6||Month1==9||Month1==11) && (Day>30))||((Month2==4||Month2==6||Month2==9||Month2==11) && (Day2>30)))
                                         return;
-                                if(Month1==2)
+                                if((Month1==2)||(Month2==2))
                                 {
                                         if((Day>29)&&((Year1%4==0)&&(Year1%100!=0))||((Year1%100==0)&&(Year1%400==0)))
                                                 return;
                                         else if (Day>28 && (!(((Year1%4==0)&&(Year1%100!=0))||((Year1%100==0)&&(Year1%400==0)))))
+                                                return;
+                                        if((Day2>29)&&((Year2%4==0)&&(Year2%100!=0))||((Year2%100==0)&&(Year2%400==0)))
+                                                return;
+                                        else if (Day2>28 && (!(((Year2%4==0)&&(Year2%100!=0))||((Year2%100==0)&&(Year2%400==0)))))
                                                 return;
 
                                 }
@@ -302,10 +319,11 @@ public class Assignments extends SecureAction
                         	                //crit.add(NewsPeer.USER_ID,uid);
                 	                        crit.add(NewsPeer.NEWS_TITLE,News);
 		                                crit.add(NewsPeer.NEWS_DESCRIPTION,MessageBox);
-                                                crit.add(NewsPeer.PUBLISH_DATE,Cur_date);
+                                                crit.add(NewsPeer.PUBLISH_DATE,Start_date);
                                                 crit.add(NewsPeer.EXPIRY,Edate);
                                                 crit.add(NewsPeer.EXPIRY_DATE,Post_date);
 						NewsPeer.doInsert(crit);
+                                                //crit.add(NewsPeer.PUBLISH_DATE,Cur_date);
                                                 /**
 						* Insert the Aissignment Info
                 		                * from the Assignment table
@@ -319,11 +337,12 @@ public class Assignments extends SecureAction
                                                 crit1.add(AssignmentPeer.ASSIGN_ID,agroup_name);
                                                 crit1.add(AssignmentPeer.GROUP_NAME,courseid);
                                                 crit1.add(AssignmentPeer.TOPIC_NAME,DB_subject1);
-                                                crit1.add(AssignmentPeer.CUR_DATE,Cur_date);
+                                                crit1.add(AssignmentPeer.CUR_DATE,Start_date);
                                                 crit1.add(AssignmentPeer.DUE_DATE,Post_date);
                                                 crit1.add(AssignmentPeer.PER_DATE,Post_date);
                                                 crit1.add(AssignmentPeer.GRADE,Grade);
                                                 crit1.add(AssignmentPeer.PUBLSH_STATUS,pubst);
+                                                //crit1.add(AssignmentPeer.CUR_DATE,Cur_date);
 						//ErrorDumpUtil.ErrorLog("I am here 289 ====>"+mode + agroup_name + courseid + DB_subject1 + Cur_date + Post_date + Post_date + Grade);
 						if (mode.equals("Update")) {
 //							ErrorDumpUtil.ErrorLog("In Assignment Update====>");
@@ -433,7 +452,7 @@ public class Assignments extends SecureAction
                         	                crit.add(NewsPeer.USER_ID,userid);
                 	                        crit.add(NewsPeer.NEWS_TITLE,News);
 		                                crit.add(NewsPeer.NEWS_DESCRIPTION,MessageBox);
-                                                crit.add(NewsPeer.PUBLISH_DATE,Cur_date);
+                                                crit.add(NewsPeer.PUBLISH_DATE,Start_date);
                                                 crit.add(NewsPeer.EXPIRY,Edate);
                                                 crit.add(NewsPeer.EXPIRY_DATE,Post_date);
 						NewsPeer.doInsert(crit);
@@ -449,7 +468,7 @@ public class Assignments extends SecureAction
                                                 crit1.add(AssignmentPeer.ASSIGN_ID,agroup_name);
                                                 crit1.add(AssignmentPeer.GROUP_NAME,courseid);
                                                 crit1.add(AssignmentPeer.TOPIC_NAME,DB_subject1);
-                                                crit1.add(AssignmentPeer.CUR_DATE,Cur_date);
+                                                crit1.add(AssignmentPeer.CUR_DATE,Start_date);
                                                 crit1.add(AssignmentPeer.DUE_DATE,Post_date);
                                                 crit1.add(AssignmentPeer.PER_DATE,Post_date);
                                                 crit1.add(AssignmentPeer.GRADE,Grade);
