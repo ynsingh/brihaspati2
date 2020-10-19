@@ -120,11 +120,16 @@ public class ViewAss extends  SecureScreen
 				int eid=0;
 				ModuleTimeThread.getController().CourseTimeSystem(userid,eid);
                          }
+			
+				DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                        	Date curDate1=new Date();
+                        	String curdate=dateFormat.format(curDate1);
+                       		long todayDate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
 
 			Criteria crit=new Criteria();
                         crit.add(AssignmentPeer.GROUP_NAME,courseid);
-			if(Role.equals("student"))
-				crit.add(AssignmentPeer.PUBLSH_STATUS,0);
+//			if(Role.equals("student"))
+//				crit.add(AssignmentPeer.PUBLSH_STATUS,0);
                         List u=AssignmentPeer.doSelect(crit);
                         for(int i=0;i<u.size();i++)
                         {
@@ -134,7 +139,15 @@ public class ViewAss extends  SecureScreen
                                 if(Assid.startsWith(courseid))
                                 {
 					String str2=(element.getTopicName());
-                                        w.add(str2);
+        	                 /*       Date sdate2=(element.getCurDate());
+                        	        startdate=dateFormat.format(sdate2);
+	                                long longstartdate=Long.parseLong(((startdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+                	                coursesdate =todayDate-longstartdate;
+					if((Role.equals("student")) && (coursesdate >= 0))
+                                        	w.add(str2);
+					else*/
+                                        	w.add(str2);
+
                                         if(str2.equals(DB_subject1))
                                         {
                                                 Assign =Assign+"/"+Assid;
@@ -229,6 +242,7 @@ public class ViewAss extends  SecureScreen
                         String gradecheck="notok";
                         String studentfilecheck="notok";
 			String postAnsChk="no";
+			String startAssChk="no";
 			if(stname.size()==0)
 				context.put("startpage",stname.size());	
 			else
@@ -335,23 +349,27 @@ public class ViewAss extends  SecureScreen
 				String stFName=UserUtil.getFullName(UserUtil.getUID(studentname));
 				// Get the roll no of this student		
 				String  stRlNo=CourseProgramUtil.getUserRollNo(studentname,courseid);
-				
-				DateFormat  dateFormat= new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                        	Date curDate1=new Date();
-                        	String curdate=dateFormat.format(curDate1);
-                       		long todayDate=Long.parseLong(((curdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				//get the diff between  end date time and current data time
 				long newDueDate=Long.parseLong(((filedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
 				long ddiff=newDueDate - todayDate;
-//				Date date1 = new Date();
-//				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-//				String dateFormatted = dateFormat.format(date1);
-//				Date todayDate = dateFormat.parse(dateFormatted);
-//				Date newDueDate = dateFormat.parse(filedate);
-				
-				//ErrorDumpUtil.ErrorLog("filedate=="+filedate);
-				//ErrorDumpUtil.ErrorLog("(todayDate.compareTo(newDueDate==="+todayDate.compareTo(newDueDate));
- 			//	if ((todayDate.compareTo(newDueDate)<0)||(todayDate.compareTo(newDueDate)==0))
- 				if (ddiff >= 0)
+				//get the diff between  start date time and current data time 
+				crit=new Criteria();
+        	                crit.add(AssignmentPeer.GROUP_NAME,(String)user.getTemp("course_id"));
+        	                crit.add(AssignmentPeer.TOPIC_NAME,DB_subject1);
+	                        List uu=AssignmentPeer.doSelect(crit);
+				long coursesdate =-1;
+				String startdate="";
+				for(int i=0;i<uu.size();i++)
+                        	{
+                                	Assignment element=(Assignment)(uu.get(i));
+        	                        Date sdate2=(element.getCurDate());
+                        	        startdate=dateFormat.format(sdate2);
+	                                long longstartdate=Long.parseLong(((startdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+                	                coursesdate =todayDate-longstartdate;
+				}
+ 				if (coursesdate >= 0)
+					startAssChk = "Yes";
+ 				if ((ddiff >= 0)&&(coursesdate >= 0))
 					postAnsChk = "Yes";
 				
 				AssignmentDetail assignmentdetail=new AssignmentDetail();
@@ -367,6 +385,7 @@ public class ViewAss extends  SecureScreen
 	                        assignmentdetail.setAssignmentfile(fileAssignment);
                 	        assignmentdetail.setDuedate(duedate);
                         	assignmentdetail.setAssignmentDuedate(filedate);
+                        	assignmentdetail.setAssignmentstartdate(startdate);
                         	assignmentdetail.setmaxgrade(filegrade);
                         	assignmentdetail.setgrade(grade);
                         	assignmentdetail.setanswerfile(fileanswer);
@@ -376,6 +395,7 @@ public class ViewAss extends  SecureScreen
 				//ErrorDumpUtil.ErrorLog("   "+studentname);		
 					
 			} // for
+			context.put("startasscheck",startAssChk);
 			context.put("gradecheck",gradecheck);
 			context.put("anscheck",anscheck);
 			context.put("datecheck",datecheck);

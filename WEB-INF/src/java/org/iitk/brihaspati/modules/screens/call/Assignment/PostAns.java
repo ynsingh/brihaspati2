@@ -112,9 +112,13 @@ public class PostAns extends  SecureScreen
                         {
 			 	Assignment element=(Assignment)(u.get(i));
                                 Date date1=(element.getDueDate());
+                                Date date2=(element.getCurDate());
 				String duedate=dateFormat.format(date1);
+				String startdate=dateFormat.format(date2);
 				long longduedate=Long.parseLong(((duedate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
+				long longstartdate=Long.parseLong(((startdate.replaceAll("-","")).replaceAll(":","")).replaceAll(" ",""));
 				long coursedate =longduedate-longcurdate;
+				long coursesdate =longcurdate-longstartdate;
                                // long longCurDate1= date1.getTime();
                                // long coursedate=(longCurDate1-longCurDate)/(24*3600*1000);
                         	/**
@@ -126,13 +130,15 @@ public class PostAns extends  SecureScreen
                                         String str2=(element.getTopicName());
                                         w.add(str2);
 				}
-				if(coursedate>=0)
+				if((coursedate>=0)&&(coursesdate >=0))
 				{
 					String str2=(element.getTopicName());
 					v.add(str2);  
 				}
                         }
+			// list for teacher
              		context.put("allTopics",w);    
+			//list for student
              		context.put("allTopics1",v);    
 			/**  get Instructor or Student */
 			u=null;

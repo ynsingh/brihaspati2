@@ -118,7 +118,6 @@ $!data.getMessage()
 				<b> $brih_email #if($lang == "hindi") $brih_Of1 #end $brih_email</b>
 				<input type="text" name="GetUser"  size=26 onChange="validate1(this)"  /> &nbsp; 
 			#end
-			##&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 			<tr bgcolor="$ui.tableColor"><b> $brih_topic #if($lang == "hindi") $brih_Of1 #end $brih_name </b> &nbsp;
                 	##<SELECT name=topicList onFocus=changeTopic(document.uploadform) onChange=changeTopic(document.uploadform)>
                 	<SELECT name=topicList class="drop">
@@ -144,9 +143,10 @@ $!data.getMessage()
         	<td align="center">  <b> #if($lang == "hindi") $brih_answer $brih_Of1 $brih_view #else $brih_view $brih_answer #end </b> </td>
         	#end
         	#if($datecheck == "ok")
-        	<td align="center">  <b> $brih_assignment $brih_post #if($lang == "hindi") $brih_Of #end $brih_Da </b> </td>
+        	<td align="center">  <b> $brih_assignment $brih_post #if($lang == "hindi") $brih_Of #end $brih_Da $brih_time</b> </td>
         	#end
-        	<td  align="Center"> <b> $brih_assignment $brih_due #if($lang == "hindi") $brih_Of #end $brih_Da  </b> </td>
+        	<td  align="Center"> <b> $brih_assignment $brih_start #if($lang == "hindi") $brih_Of #end $brih_Da  $brih_time</b> </td>
+        	<td  align="Center"> <b> $brih_assignment $brih_due #if($lang == "hindi") $brih_Of #end $brih_Da $brih_time </b> </td>
 	        <td  align="Center"> <b> $brih_max $brih_marks </b> </td>
 	        <td  align="Center"> <b> $brih_action </b> </td>
         	#if($gradecheck == "ok")
@@ -154,7 +154,6 @@ $!data.getMessage()
         	<td align="center">  <b> $brih_feedback  </b> </td>
 		#end
 	#end	
-	## #if($user_role ==  "instructor")
 	#if(($user_role ==  "instructor")||($user_role ==  "teacher_assistant"))
 	<tr><td colspan=6>The $brih_instruction / $brih_assignment is 
 		 #set ($stlp = 0)
@@ -191,9 +190,10 @@ $!data.getMessage()
 		<td align="center"><b> #if($lang == "hindi") $brih_correct $brih_answer $DisBoard_DB_msg25 #else $DisBoard_DB_msg25 $brih_correct $brih_answer #end </b></td>
 		#end
 		#if($datecheck == "ok")
-		<td align="center">  <b> $brih_post #if($lang == "hindi") $brih_Of #end $brih_Da </b> </td>
+		<td align="center">  <b> $brih_post #if($lang == "hindi") $brih_Of #end $brih_Da $brih_time</b> </td>
 		#end
-		<td  align="Center"> <b> $brih_assignment $brih_due #if($lang == "hindi") $brih_Of #end $brih_Da  </b> </td>
+		<td  align="Center"> <b> $brih_assignment $brih_start #if($lang == "hindi") $brih_Of #end $brih_Da $brih_time </b> </td>
+		<td  align="Center"> <b> $brih_assignment $brih_due #if($lang == "hindi") $brih_Of #end $brih_Da $brih_time  </b> </td>
 		<td  align="Center"> <b> $brih_max $brih_marks </b> </td>
 		#if($gradecheck == "ok")
 		<td align="center">  <b> $brih_marks  </b> </td>
@@ -205,7 +205,6 @@ $!data.getMessage()
 
 	#end
 	</tr>	
-	## #if($user_role ==  "instructor")
 	#if(($user_role ==  "instructor") || ($user_role == "teacher_assistant"))
 		#foreach($e in $Assignmentlist )
 			#if($velocityCount%2==0)
@@ -251,6 +250,7 @@ $!data.getMessage()
 		</td>
 		#end
 	
+		<td width="10%" align="Center"> $!e.getAssignmentstartdate() </td>  ## startdate
 		<td width="10%" align="Center"> $!e.getAssignmentDuedate() </td>  ## Duedate
 		<td width="10%" align="Center"> $!e.getmaxgrade() </td> ## max grade
 		#if($gradecheck == "ok")
@@ -287,6 +287,7 @@ $!data.getMessage()
                 ##<td width="10%" align="Center"> $!e.getStudentname()  </td>  ##student name
                 <td width="10%" align="Center">$topicList</td>  ##Topic name
                 <td width="10%" align="center">   ##  Assignment file
+		#if($startasscheck == "Yes")
 		#set ($stlp = 0)
 		#foreach($news in $detail)
 			#if($stlp == 0)
@@ -296,6 +297,7 @@ $!data.getMessage()
 		#end
         	#if($e.getAssignmentfile()!="")
 			/<a href=javascript:popupWin("$link.setPage("call,ViewFileContent.vm").addPathInfo("view","content").addPathInfo("type","Assignment").addPathInfo("msgid",$str1).addPathInfo("filename",$!e.getAssignmentfile())","newWin"); style="text-decoration:none">$brih_assignment </a>
+		#end
 		#end
                 </td>
                 #if($anscheck == "ok")
@@ -319,6 +321,7 @@ $!data.getMessage()
                         #end
                 </td>
                 #end
+		<td width="10%" align="Center"> $!e.getAssignmentstartdate() </td>  ## startdate
 		<td width="10%" align="Center"> $!e.getAssignmentDuedate() </td>  ## Duedate
                 <td width="10%" align="Center"> $!e.getmaxgrade() </td> ## max grade
 		#if($!e.getPostAnsMode()=="Yes")

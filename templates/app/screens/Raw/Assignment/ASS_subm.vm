@@ -114,6 +114,7 @@ $!data.getMessage()
 	#set($hours=["01","02","03","04","05","06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24"])
 	#set($mins=["05","10","15","20","25","30","35","40","45","50","55","00"])
 	<table bgcolor="$ui.tableColor" width="100%">
+
 	<tr bgcolor="$ui.menuColor">
 		<td><b>$brih_topic #if($lang == "hindi") $brih_Of1 #end $brih_name<font color=Red>*</font></b></td>
 		#if($mode!="Update")
@@ -122,8 +123,10 @@ $!data.getMessage()
 		<td><input type="text" name="contentTopic" value="$topic" size=18 onChange="validate1(this)"/ readonly> &nbsp;
 		#end
 		#if($mode!="Update")
-		<input type="button" class="button-ftextstyle" name="dosubmitView" value="$brih_topic $QuestionBank_available" onClick="checkBlank1(document.uploadform,this);"/></td>
+		<input type="button" class="button-ftextstyle" name="dosubmitView" value="$brih_topic $QuestionBank_available" onClick="checkBlank1(document.uploadform,this);"/>
 		#end
+		$cyear -$cmonth -$cdays $chours:$cmins
+		</td> 
 	</tr>
 	<tr>
 		<td><b>$brih_due $brih_Da</b></td>
@@ -193,9 +196,58 @@ $!data.getMessage()
                 #fileUpload ("<b> $brih_at_file<font color=RED> * </font> </b> " "file")
 	</tr>
 	<tr>
-		<td> <b>$brih_publish</b></td>
+#**		<td> <b>$brih_publish</b></td>
 		<td><INPUT TYPE="CHECKBOX" name="publish" value="0" checked>  </td>
 		
+	</tr>
+	<tr bgcolor="$ui.menuColor">
+*#
+		<td><b>$brih_start $brih_Da</b></td>
+		<td><select class="drop" id="y" name="Start_yeara"  >
+                <option value="$cyear" >$cyear
+                #foreach($year in $year_list)
+                	#if($cyear != $year)
+                        <option value="$year">$year
+                        #end
+		#end
+                </select>
+                &nbsp <b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="m" name="Start_mona"  >
+                <option value="$cmonth">$cmonth
+		#foreach($mon in $month)
+                	#if($mon != $cmonth)
+                        <option value="$mon">$mon
+                        #end
+              	#end
+                </select>
+		&nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="d" name="Start_daya"  >
+                <option value="$cdays">$cdays
+                #foreach($d in $day)
+                	#if($d!=$cdays)
+                        <option value="$d">$d
+                        #end
+		#end
+                </select>
+		&nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="h" name="Start_houra"  >
+                <option value="$chours">$chours
+                #foreach($hrs in $hours)
+                	#if($hrs!=$chours)
+                        <option value="$hrs">$hrs
+                        #end
+		#end
+                </select>
+		&nbsp<b><font size=+1>-</font></b>&nbsp
+                <select class="drop" id="m" name="Start_mina"  >
+                <option value="$cmins">$cmins
+                #foreach($min in $mins)
+                	#if($min!=$cmins)
+                        <option value="$min">$min
+                        #end
+		#end
+                </select>
+                </td>
 	</tr>
 	<tr bgcolor="$ui.menuColor">
 		<td colspan=2>

@@ -52,6 +52,7 @@ public class AssignmentDetail
         private String feedback;
 	private String Duedate;
 	private String AssignmentDuedate;
+	private String Assignmentstartdate;
 	private String Topicname;
         private String Assignmentdate;
         private String PostAnsMode;
@@ -199,6 +200,14 @@ public class AssignmentDetail
                 return Assignmentdate;
         }
 	
+	public void setAssignmentstartdate(String Assignmentstartdate)
+        {
+                this.Assignmentstartdate=Assignmentstartdate;
+        }
+        public String getAssignmentstartdate()
+        {
+                return Assignmentstartdate;
+        }
 	public void setAssignmentDuedate(String AssignmentDuedate)
         {
                 this.AssignmentDuedate=AssignmentDuedate;
