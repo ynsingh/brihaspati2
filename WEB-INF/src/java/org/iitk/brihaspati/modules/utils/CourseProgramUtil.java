@@ -52,6 +52,7 @@ import org.iitk.brihaspati.om.CoursesPeer;
 import org.iitk.brihaspati.om.Courses;
 import org.iitk.brihaspati.om.StudentRollnoPeer;
 import org.iitk.brihaspati.om.StudentRollno;
+import org.iitk.brihaspati.om.InstituteProgramPeer;
 /**
   * @author <a href="mailto:richa.tandon1@gmail.com">Richa Tandon</a>
   */ 
@@ -104,6 +105,14 @@ public class CourseProgramUtil
 		MultilingualUtil m_u=new MultilingualUtil();
                 try
                 {
+			//check the existance of program
+			crit=new Criteria();
+			crit.add(InstituteProgramPeer.PROGRAM_CODE,Prg);
+			crit.add(InstituteProgramPeer.INSTITUTE_ID,Integer.parseInt(Instid));
+			List pi=InstituteProgramPeer.doSelect(crit);
+			if(pi.size()!=0)
+                         {
+
 		 	//First check existence of program ,  institute with user in db
 			 crit=new Criteria();	
 			 crit.add(StudentRollnoPeer.EMAIL_ID,uname);
@@ -177,6 +186,10 @@ public class CourseProgramUtil
 						Msg= m_u.ConvertedString("prgm_msg1",File);
 				}
 			}
+			 }else{
+			ErrorDumpUtil.ErrorLog("Program code does not exist with this institute:--utils(CourseProgramUtil) ");
+			Msg= m_u.ConvertedString("Program code does not exist with this institute:--utils(CourseProgramUtil)",File);
+			 }
 		}
                 catch(Exception e){
                         ErrorDumpUtil.ErrorLog("This is the exception in Insert Roll No :--utils(CourseProgramUtil) "+e);
